@@ -1,6 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the signinwebsite index.")
+def signin_page(request):
+    context = {"is_signin": True}
+    return render(request, 'signin/signin.html', context)
+
+
+def signout_page(request):
+    context = {"is_signin": False}
+    return render(request, 'signin/signin.html', context)
