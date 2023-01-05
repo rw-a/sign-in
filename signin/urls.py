@@ -5,6 +5,7 @@ from . import views
 
 app_name = 'signin'
 urlpatterns = [
+    path('', views.index, name='index'),
     path('signin/', views.signin_page, name='signin'),
     path('signout/', views.signout_page, name='signout'),
     path('qrsignin/', views.qr_signin_page, name='qrsignin'),

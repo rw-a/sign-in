@@ -1,8 +1,13 @@
 import json
+from django.urls import reverse
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Person, Signin
+
+
+def index(request):
+    return HttpResponseRedirect(reverse('signin:qrsignin'))
 
 
 def get_signedin_people(signed_in: bool):
