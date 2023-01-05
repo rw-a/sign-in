@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a href="/signin" class="nav-item nav-link {% if page == 'signin' %}active{% endif %}">Sign In</a>
+                <a href="/signout" class="nav-item nav-link {% if page == 'signout' %}active{% endif %}">Sign Out</a>
+                <a href="/qrsignin" class="nav-item nav-link {% if page == 'qrsignin' %}active{% endif %}">QR Sign In</a>
+                <a href="/qrsignout" class="nav-item nav-link {% if page == 'qrsignout' %}active{% endif %}">QR Sign Out</a>
+            </div>
+            <div class="navbar-nav ms-auto">
+                <a href="/generateqr" class="nav-item nav-link {% if page == 'generateqr' %}active{% endif %}">Generate QR Codes</a>
+                <a href="/admin" class="nav-item nav-link">Admin</a>
+            </div>
+        </div>
+    </div>
+</nav>
