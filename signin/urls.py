@@ -1,5 +1,6 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
-
 from . import views
 
 app_name = 'signin'
@@ -8,5 +9,6 @@ urlpatterns = [
     path('signout/', views.signout_page, name='signout'),
     path('qrsignin/', views.qr_signin_page, name='qrsignin'),
     path('qrsignout/', views.qr_signout_page, name='qrsignout'),
+    path('generateqr/', views.generate_qr_page, name='generateqr'),
     path('api/signin', views.signin_request, name='signin_request')
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

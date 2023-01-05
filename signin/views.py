@@ -45,6 +45,12 @@ def qr_signout_page(request):
 
 
 @staff_member_required
+def generate_qr_page(request):
+    context = {"page": "generateqr"}
+    return render(request, 'signin/generateqr.html', context)
+
+
+@staff_member_required
 def signin_request(request):    # this also handles signout requests
     if request.method == "POST":
         data = json.loads(request.body)

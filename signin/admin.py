@@ -6,9 +6,11 @@ from .models import Person, Signin
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'emergency_contact', 'media_permission', 'pk')
     date_hierarchy = "date_added"
+    ordering = ("name",)
 
 
 @admin.register(Signin)
 class SigninAdmin(admin.ModelAdmin):
-    list_display = ('person', 'date', 'is_signin')
+    list_display = ('person', 'is_signin', 'date')
     date_hierarchy = "date"
+    ordering = ("date",)
