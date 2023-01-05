@@ -6,19 +6,19 @@ from .models import Person, Signin
 
 
 @staff_member_required
-def signin_page(request):
+def qr_signin_page(request):
     context = {"is_signin": True}
-    return render(request, 'signin/signin.html', context)
+    return render(request, 'signin/qrsignin.html', context)
 
 
 @staff_member_required
-def signout_page(request):
+def qr_signout_page(request):
     context = {"is_signin": False}
-    return render(request, 'signin/signin.html', context)
+    return render(request, 'signin/qrsignin.html', context)
 
 
 @staff_member_required
-def signin_request(request):    # this is also handles signout requests
+def signin_request(request):    # this also handles signout requests
     if request.method == "POST":
         data = json.loads(request.body)
         try:
