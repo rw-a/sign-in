@@ -11,6 +11,13 @@ class Person(models.Model):
     media_permission = models.BooleanField(default=False)
     date_added = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        verbose_name = "Person"
+        verbose_name_plural = "People"
+
+    def __str__(self):
+        return self.name
+
 
 class Signin(models.Model):
     is_signin = models.BooleanField(choices=[(True, "Sign in"), (False, "Sign out")], verbose_name="Sign in/out")
@@ -19,3 +26,7 @@ class Signin(models.Model):
 
     class Meta:
         verbose_name = "Sign in/out"
+
+    def __str__(self):
+        print(self.is_signin)
+        return f"{self.is_signin} {self.person}"
