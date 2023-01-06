@@ -51,7 +51,11 @@ def qr_signout_page(request):
 
 @staff_member_required
 def generate_qr_page(request):
-    context = {"page": "generateqr"}
+    people = {}
+    for person in Person.objects.all():
+        people[person.pk] = person.name
+
+    context = {"page": "generateqr", "people": people}
     return render(request, 'signin/generateqr.html', context)
 
 
