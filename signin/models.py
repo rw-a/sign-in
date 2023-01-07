@@ -14,6 +14,7 @@ class Person(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "People"
+        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -28,5 +29,4 @@ class Signin(models.Model):
         verbose_name = "Sign in/out"
 
     def __str__(self):
-        print(self.is_signin)
-        return f"{self.is_signin} {self.person}"
+        return f"{self.person} - {'Sign In' if self.is_signin else 'Sign Out'}"
