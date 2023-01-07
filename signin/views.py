@@ -7,7 +7,7 @@ from .models import Person, Signin
 
 
 def index(request):
-    return HttpResponseRedirect(reverse('signin:qrsignin'))
+    return HttpResponseRedirect(reverse('signin:signin'))
 
 
 def get_people():
