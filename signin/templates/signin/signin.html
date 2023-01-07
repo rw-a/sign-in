@@ -33,6 +33,7 @@
     {% include "signin/navbar.html" %}
     <div class="container-md my-3 px-3">
         <h2>Sign {% if is_signin %}In{% else %}Out{% endif %}</h2>
+        <p hidden id="nobody" class="text-secondary">Nobody is signed in</p>
         <ul class="list-unstyled">
             {% for pk, person in people.items %}
             {% if is_signin or person.signed_in %}
@@ -67,6 +68,12 @@
                 console.error('Error:', error);
             });
         }
+
+        {% if not is_signin %}
+        if (document.querySelector('ul').children.length == 0) {
+            document.getElementById('nobody').hidden = false;
+        }
+        {% endif %}
     </script>
 </body>
 </html>
