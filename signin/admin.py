@@ -14,3 +14,7 @@ class SigninAdmin(admin.ModelAdmin):
     list_display = ('person', 'is_signin', 'date')
     date_hierarchy = "date"
     ordering = ("date",)
+
+
+admin.site.site_header = "Sign In/Out System"
+admin.site.site_title = "Sign In/Out"
