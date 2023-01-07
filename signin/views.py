@@ -10,30 +10,35 @@ def index(request):
     return HttpResponseRedirect(reverse('signin:qrsignin'))
 
 
-def get_signedin_people(signed_in: bool):
+def get_people():
+    people = {}
+    for person in Person.objects.all():
+        people[person.pk] = person.name
+    return people
+
+
+def get_people_signin_status():
     # signed_in determines if it gets signed in people (True) or signed out people (False)
     people = {}     # dict with pk as key and name as value
     for person in Person.objects.all():
         if person.signin_set.count() == 0:
             # if a person has no sign ins, treat them as signed out
-            if not signed_in:
-                people[person.pk] = person.name
+            people[person.pk] = {"name": person.name, "signed_in": False}
         else:
             last_signin = person.signin_set.latest("date")  # gets the most recent sign in/out
-            if last_signin.is_signin == signed_in:
-                people[person.pk] = person.name
+            people[person.pk] = {"name": person.name, "signed_in": last_signin.is_signin}
     return people
 
 
 @staff_member_required
 def signin_page(request):
-    context = {"page": "signin", "is_signin": True}
+    context = {"page": "signin", "is_signin": True, "people": get_people_signin_status()}
     return render(request, 'signin/signin.html', context)
 
 
 @staff_member_required
 def signout_page(request):
-    context = {"page": "signout", "is_signin": False}
+    context = {"page": "signout", "is_signin": False, "people": get_people_signin_status()}
     return render(request, 'signin/signin.html', context)
 
 
@@ -51,11 +56,7 @@ def qr_signout_page(request):
 
 @staff_member_required
 def generate_qr_page(request):
-    people = {}
-    for person in Person.objects.all():
-        people[person.pk] = person.name
-
-    context = {"page": "generateqr", "people": people}
+    context = {"page": "generateqr", "people": get_people()}
     return render(request, 'signin/generateqr.html', context)
 
 
@@ -66,7 +67,11 @@ def signin_request(request):    # this also handles signout requests
         try:
             person = Person.objects.get(pk=data['pk'])
         except Person.DoesNotExist:
-            return JsonResponse({"success": "false"})
+            try:
+                # if the getting someone by id doesn't work, try using their name (for legacy qr codes)
+                person = Person.objects.get(name=data['pk'])
+            except Person.DoestNotExist:
+                return JsonResponse({"success": "false"})
         signin = Signin(is_signin=data['is_signin'], person=person)
         signin.save()
         return JsonResponse({"success": "true", "person": person.name})
