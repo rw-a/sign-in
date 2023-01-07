@@ -33,7 +33,7 @@
     {% include "signin/navbar.html" %}
     <div class="container-md my-3 px-3">
         <h2>Sign {% if is_signin %}In{% else %}Out{% endif %}</h2>
-        <p hidden id="nobody" class="text-secondary">Nobody is signed in</p>
+        <p id="peopleCount" class="text-secondary"></p>
         <ul class="list-unstyled">
             {% for pk, person in people.items %}
             {% if is_signin or person.signed_in %}
@@ -63,17 +63,23 @@
             .then((response) => response.json())
             .then((data) => {
                 console.log('Success:', data);
+                updatePeopleCount();
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         }
 
-        {% if not is_signin %}
-        if (document.querySelector('ul').children.length == 0) {
-            document.getElementById('nobody').hidden = false;
+        function updatePeopleCount() {
+            let numPeople = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            console.log(numPeople)
+            if (numPeople > 0) {
+                document.getElementById('peopleCount').innerText = `Signed In: ${numPeople}`;
+            } else {
+                document.getElementById('peopleCount').innerText = "Nobody is signed in right now";
+            }
         }
-        {% endif %}
+        updatePeopleCount();
     </script>
 </body>
 </html>
