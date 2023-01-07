@@ -18,8 +18,8 @@
                 {% for pk, name in people.items %}
                 <li>
                     <div class="form-check">
-                        <label class="form-check-label">{{ name }}</label>
-                        <input class="form-check-input" type="checkbox" value="{{ pk }}" title="{{ name }}">
+                        <input class="form-check-input" type="checkbox" value="{{ pk }}" title="{{ name }}" id="{{ pk }}">
+                        <label class="form-check-label" for="{{ pk }}">{{ name }}</label>
                     </div>
                 </li>
                 {% endfor %}
