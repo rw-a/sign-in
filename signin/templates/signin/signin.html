@@ -6,32 +6,43 @@
     <title>Sign {% if is_signin %}In{% else %}Out{% endif %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
+<style>
+    ul {
+      -webkit-column-count: 3; /* Chrome, Safari, Opera */
+      -moz-column-count: 3; /* Firefox */
+      column-count: 3;
+    }
+    @media (max-width: 576px) {
+      ul {
+        -webkit-column-count: 1; /* Chrome, Safari, Opera */
+        -moz-column-count: 1; /* Firefox */
+        column-count: 1;
+      }
+    }
+    {% if is_signin %}
+    input[type="checkbox"]:checked {
+        opacity: 0.3;
+    }
+
+    input[type="checkbox"]:checked + label {
+        opacity: 0.3;
+    }
+    {% endif %}
+</style>
 <body>
-    <style>
-        ul {
-          -webkit-column-count: 3; /* Chrome, Safari, Opera */
-          -moz-column-count: 3; /* Firefox */
-          column-count: 3;
-        }
-        @media (max-width: 576px) {
-          ul {
-            -webkit-column-count: 1; /* Chrome, Safari, Opera */
-            -moz-column-count: 1; /* Firefox */
-            column-count: 1;
-          }
-        }
-    </style>
     {% include "signin/navbar.html" %}
     <div class="container-md my-3 px-3">
         <h2>Sign {% if is_signin %}In{% else %}Out{% endif %}</h2>
         <ul class="list-unstyled">
             {% for pk, person in people.items %}
+            {% if is_signin or person.signed_in %}
             <li>
                 <div class="form-check">
-                    <label class="form-check-label">{{ person.name }}</label>
-                    <input class="form-check-input" type="checkbox" value="{{ pk }}" title="{{ person.name }}" onclick="signIn(this)" {% if person.signed_in %}checked{% endif %}>
+                    <input class="form-check-input" type="checkbox" id="{{ pk }}" value="{{ pk }}" title="{{ person.name }}" onclick="signIn(this)" {% if person.signed_in %}checked{% endif %}>
+                    <label class="form-check-label" for="{{ pk }}">{{ person.name }}</label>
                 </div>
             </li>
+            {% endif %}
             {% endfor %}
         </ul>
     </div>
