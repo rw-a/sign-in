@@ -84,15 +84,24 @@
                         text-align: center;
                     }
 
-                    .codesList {
-                        column-count: 4;
+                    .page {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        width: 100%;
+                    }
+
+                    div.person {
+                        flex: 1;
+                        padding-left: 5mm;
+                        padding-right: 5mm;
+                        padding-bottom: 3mm;
+                        display: table;
                     }
 
                     @media print {
-                        div.person {
-                            display: table;
-                            page-break-inside: avoid;
-                            margin-bottom: 10mm;
+                        .page {
+                            page-break-after: always;
                         }
                         p.help {
                             display: none;
@@ -105,16 +114,23 @@
             let codes = document.getElementById('codes');
             codes.innerHTML = '<p class="help">Use your browser to print this page. Ctrl+P on Windows, Cmd+P on Mac.</p>';   // clear the codes div incase it was filled previously
             let codesContainer = document.createElement('div');
-            codesContainer.classList.add("codesList")
+            codesContainer.id = "codesContainer"
             codes.appendChild(codesContainer);
 
+            let checkboxIndex = 0;
             for (let checkbox of document.querySelectorAll('input[type="checkbox"]')) {
                 if (!checkbox.checked) continue;
+                
+                if (checkboxIndex % 35 == 0) {       // every 35 people, separate them into a new page
+                    var page = document.createElement('div');
+                    page.classList.add("page");
+                    codesContainer.appendChild(page);
+                }
 
                 let person_pk = checkbox.value;
                 let person_name = checkbox.title;
 
-                codesContainer.insertAdjacentHTML('beforeend', `
+                page.insertAdjacentHTML('beforeend', `
                     <div class="person">
                         <div class="qrcode" id="qrCode_${person_pk}"></div>
                         <p class="label">${person_name}</p>
@@ -125,6 +141,8 @@
                     text: person_pk,
                     useSVG: true
                 });
+
+                checkboxIndex += 1;
             }
             printDiv(codes);
             codes.hidden = true;
