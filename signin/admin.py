@@ -4,7 +4,7 @@ from .models import Person, Signin
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'emergency_contact', 'media_permission', 'pk')
+    list_display = ('name', 'emergency_contact_name', 'emergency_contact_phone_number', 'media_permission', 'pk')
     date_hierarchy = "date_added"
     ordering = ("name",)
 

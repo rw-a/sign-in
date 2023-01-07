@@ -82,7 +82,6 @@
 
         function updatePeopleCount() {
             let numPeople = document.querySelectorAll('input[type="checkbox"]:checked').length;
-            console.log(numPeople)
             if (numPeople > 0) {
                 document.getElementById('peopleCount').innerText = `Signed In: ${numPeople}`;
             } else {
