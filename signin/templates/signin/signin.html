@@ -7,21 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-    {% include "signin/navbar.html" %}
-    <div class="container-md my-3 px-3">
-        <h2>Sign {% if is_signin %}In{% else %}Out{% endif %}</h2>
-        <ul class="list-unstyled">
-            {% for pk, person in people.items %}
-            <li>
-                <div class="form-check">
-                    <label class="form-check-label">{{ person.name }}</label>
-                    <input class="form-check-input" type="checkbox" value="{{ pk }}" title="{{ person.name }}" {% if person.signed_in %}checked{% endif %}>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <style>
         ul {
           -webkit-column-count: 3; /* Chrome, Safari, Opera */
@@ -36,5 +21,41 @@
           }
         }
     </style>
+    {% include "signin/navbar.html" %}
+    <div class="container-md my-3 px-3">
+        <h2>Sign {% if is_signin %}In{% else %}Out{% endif %}</h2>
+        <ul class="list-unstyled">
+            {% for pk, person in people.items %}
+            <li>
+                <div class="form-check">
+                    <label class="form-check-label">{{ person.name }}</label>
+                    <input class="form-check-input" type="checkbox" value="{{ pk }}" title="{{ person.name }}" onclick="signIn(this)" {% if person.signed_in %}checked{% endif %}>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        function signIn(element) {
+            let is_signin = element.checked;
+            fetch("{% url 'signin:signin_request' %}", {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken": '{{csrf_token}}'
+            },
+                credentials: 'same-origin',
+                body: JSON.stringify({pk: element.value, is_signin: is_signin}),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </body>
 </html>
