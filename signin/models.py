@@ -6,7 +6,7 @@ from django.utils import timezone
 class Person(models.Model):
     name = models.CharField(max_length=100, verbose_name="Full Name")
     emergency_contact_name = models.CharField(blank=True, max_length=100)
-    emergency_contact_phone_number = models.CharField(blank=True, max_length=10, validators=[MinLengthValidator(10)])
+    emergency_contact_phone_number = models.CharField(blank=True, max_length=9, validators=[MinLengthValidator(12)])
     media_permission = models.BooleanField(default=False)
     date_added = models.DateTimeField(default=timezone.now)
 
