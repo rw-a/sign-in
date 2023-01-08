@@ -22,7 +22,7 @@
 </style>
 <body>
     {% include "signin/navbar.html" %}
-    <div class="container-md my-3 px-3">
+    <div class="container-md my-3 px-3" id="container">
         <div class="row">
             <h2>Generate Graph</h2>
             <p>Select the people that you would like to include in the graph.</p>
@@ -62,7 +62,11 @@
                     "X-CSRFToken": '{{csrf_token}}'
             },
                 credentials: 'same-origin',
-                body: JSON.stringify({people_ids: people_ids}),
+                body: JSON.stringify({
+                    people_ids: people_ids, 
+                    width: document.getElementById('container').offsetWidth - 32, 
+                    height: window.innerHeight - document.querySelector('body').offsetHeight - 32
+                }),
             })
             .then((response) => response.json())
             .then((data) => {

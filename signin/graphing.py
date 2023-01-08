@@ -2,9 +2,9 @@ import plotly.graph_objects as go
 from .models import Person, Signin
 
 
-def graph_people(people_ids: list):
+def graph_people(people_ids: list, width: int, height: int):
     people = [Person.objects.get(pk=pk) for pk in people_ids]   # converts the list of ids into a list of Person objects
-    signins = Signin.objects.order_by('-date')
+    signins = Signin.objects.filter(is_signin=True).order_by('date')
 
     # get every date where there has been a sign in
     dates = []
@@ -13,7 +13,7 @@ def graph_people(people_ids: list):
         if date not in dates:
             dates.append(date)
 
-    x = [date.strftime("%a %x") for date in dates]  # the x-axis of the heatmap corresponds to the date
+    x = [date.strftime("%a %d/%m/%y") for date in dates]  # the x-axis of the heatmap corresponds to the date
     y = [person.name for person in people]          # the y-axis of the heatmap corresponds to the person
 
     z = []   # the z-axis of the heatmap corresponds to whether the person attended
@@ -31,4 +31,4 @@ def graph_people(people_ids: list):
         xgap=1, ygap=1
     ))
 
-    return fig.to_image(format='svg').decode('utf-8')
+    return fig.to_image(format='svg', width=width, height=height).decode('utf-8')
