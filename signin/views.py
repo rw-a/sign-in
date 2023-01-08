@@ -61,6 +61,12 @@ def generate_qr_page(request):
 
 
 @staff_member_required
+def graph_page(request):
+    context = {"page": "graph", "people": get_people()}
+    return render(request, 'signin/graph.html', context)
+
+
+@staff_member_required
 def signin_request(request):    # this also handles signout requests
     if request.method == "POST":
         data = json.loads(request.body)
@@ -75,3 +81,9 @@ def signin_request(request):    # this also handles signout requests
         signin = Signin(is_signin=data['is_signin'], person=person)
         signin.save()
         return JsonResponse({"success": "true", "person": person.name})
+
+
+@staff_member_required
+def graph_request(request):
+    image = "nice"
+    return JsonResponse({"image": image})
