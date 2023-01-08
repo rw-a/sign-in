@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Person, Signin
+from .graphing import graph_people
 
 
 def index(request):
@@ -85,5 +86,6 @@ def signin_request(request):    # this also handles signout requests
 
 @staff_member_required
 def graph_request(request):
-    image = "nice"
-    return JsonResponse({"image": image})
+    data = json.loads(request.body)
+    graph = graph_people(data['people_ids'])
+    return JsonResponse({"graph": graph})
