@@ -6,14 +6,12 @@ from .models import Person, Signin
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'emergency_contact_name', 'emergency_contact_phone_number', 'media_permission', 'pk')
     date_hierarchy = "date_added"
-    ordering = ("name",)
 
 
 @admin.register(Signin)
 class SigninAdmin(admin.ModelAdmin):
     list_display = ('person', 'is_signin', 'date')
     date_hierarchy = "date"
-    ordering = ("date",)
 
 
 admin.site.site_header = "Sign In/Out System"
