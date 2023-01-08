@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 from .models import Person, Signin
 
 
-def graph_people(people_ids: list, width: int, height: int):
+def graph_people(people_ids: list):
     people = [Person.objects.get(pk=pk) for pk in people_ids]   # converts the list of ids into a list of Person objects
     signins = Signin.objects.filter(is_signin=True).order_by('date')
 
@@ -26,9 +26,22 @@ def graph_people(people_ids: list, width: int, height: int):
 
     fig = go.Figure(data=go.Heatmap(
         z=z, y=y, x=x,
-        hoverinfo='skip',
         colorscale='RdYlGn',
         xgap=1, ygap=1
     ))
 
-    return fig.to_image(format='svg', width=width, height=height).decode('utf-8')
+    fig.update_layout(
+        margin=dict(l=20, r=20, t=30, b=20),
+)
+
+    config = {
+        'displaylogo': False,
+        'toImageButtonOptions': {
+            'format': 'png',
+            'filename': 'Sign-in Graph',
+            'scale': 2
+        },
+        'modeBarButtonsToRemove': ['autoScale']
+    }
+
+    return fig.to_html(full_html=False, config=config, include_plotlyjs='cdn', default_height=680)

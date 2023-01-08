@@ -87,5 +87,5 @@ def signin_request(request):    # this also handles signout requests
 @staff_member_required
 def graph_request(request):
     data = json.loads(request.body)
-    graph = graph_people(data['people_ids'], width=data['width'], height=data['height'])
+    graph = graph_people(data['people_ids'])
     return JsonResponse({"graph": graph})
