@@ -41,6 +41,7 @@
             <div class="my-3">
                 <button type="button" class="btn btn-primary" onclick="graph()">Graph</button>
                 <button type="button" class="btn btn-secondary" onclick="selectAll()">Select All</button>
+                <p hidden class="text-danger" id="error"><small>You must select at least one person</small></p>
             </div>
         </form>
         <div id="graph"></div>
@@ -55,6 +56,12 @@
 
         function graph() {
             let people_ids = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map((checkbox) => {return checkbox.value;});
+            if (people_ids.length < 1) {
+                document.getElementById('error').hidden = false;
+                return false;
+            } else {
+                document.getElementById('error').hidden = true;
+            }
             fetch("{% url 'signin:graph_request' %}", {
                 method: 'POST',
                 headers: {
