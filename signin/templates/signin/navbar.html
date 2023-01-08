@@ -11,8 +11,14 @@
                 <a href="/qrsignout" class="nav-item nav-link {% if page == 'qrsignout' %}active{% endif %}">QR Sign Out</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <a href="/generateqr" class="nav-item nav-link {% if page == 'generateqr' %}active{% endif %}">Generate QR Codes</a>
-                <a href="/admin/signin/person" class="nav-item nav-link">Admin</a>
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tools</a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                    <a href="/generateqr" class="nav-item nav-link {% if page == 'generateqr' %}active{% endif %}">Generate QR Codes</a>
+                    <a href="/graph" class="nav-item nav-link {% if page == 'graph' %}active{% endif %}">Graph</a>
+                    <a href="/admin/signin/person" class="nav-item nav-link">Admin</a>
+                  </div>
+                </div>
             </div>
         </div>
     </div>
