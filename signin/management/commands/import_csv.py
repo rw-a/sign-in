@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            with open(options['filename']) as file:
+            with open(options['filename'], 'r', encoding='utf-8-sig') as file:
                 reader = csv.DictReader(file)
                 people = []
                 for row in reader:
