@@ -73,11 +73,11 @@ def signin_request(request):    # this also handles signout requests
         data = json.loads(request.body)
         try:
             person = Person.objects.get(pk=data['pk'])
-        except Person.DoesNotExist:
+        except (ValueError, Person.DoesNotExist):
             try:
                 # if the getting someone by id doesn't work, try using their name (for legacy qr codes)
                 person = Person.objects.get(name=data['pk'])
-            except Person.DoestNotExist:
+            except (ValueError, Person.DoesNotExist):
                 return JsonResponse({"success": "false"})
         signin = Signin(is_signin=data['is_signin'], person=person)
         signin.save()

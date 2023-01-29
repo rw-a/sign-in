@@ -49,8 +49,14 @@
             })
             .then((response) => response.json())
             .then((data) => {
-                document.getElementById('output').innerText = `Successfully signed {% if is_signin %}in{% else %}out{% endif %} ${data.person}`;
-                output.classList.add("text-success");
+                console.log(data);
+                if (data.success === "true") {
+                    document.getElementById('output').innerText = `Successfully signed {% if is_signin %}in{% else %}out{% endif %} ${data.person}`;
+                    output.classList.add("text-success");
+                } else {
+                    document.getElementById('output').innerText = `Could not sign {% if is_signin %}in{% else %}out{% endif %} ${decodedText}`;
+                    output.classList.add("text-danger");
+                }
                 scheduleResetOutput();
             })
             .catch((error) => {
