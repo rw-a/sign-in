@@ -6,6 +6,24 @@ from .models import Person, Signin
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'emergency_contact_name', 'emergency_contact_phone_number', 'media_permission', 'pk')
     date_hierarchy = "date_added"
+    actions = ('resave', 'allow_media_permission', 'disallow_media_permission')
+
+    @admin.action(description='Resave selected people (refreshes last names)')
+    def resave(self, request, queryset):
+        for obj in queryset:
+            obj.save()
+
+    @admin.action(description='Set selected people to give media permission')
+    def allow_media_permission(self, request, queryset):
+        for obj in queryset:
+            obj.media_permission = True
+            obj.save()
+
+    @admin.action(description='Set selected people to revoke media permission')
+    def disallow_media_permission(self, request, queryset):
+        for obj in queryset:
+            obj.media_permission = False
+            obj.save()
 
 
 @admin.register(Signin)
