@@ -4,6 +4,7 @@ from django.utils import timezone
 
 class Person(models.Model):
     name = models.CharField(max_length=100, verbose_name="Full Name")
+    last_name = models.CharField(max_length=100, editable=False)
     emergency_contact_name = models.CharField(blank=True, max_length=100)
     emergency_contact_phone_number = models.CharField(blank=True, max_length=20)
     media_permission = models.BooleanField(default=False)
@@ -12,10 +13,14 @@ class Person(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "People"
-        ordering = ['name']
+        ordering = ['last_name']
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.last_name = self.name.split(" ")[-1]
+        super().save(*args, **kwargs)
 
 
 class Signin(models.Model):
