@@ -13,7 +13,7 @@ def index(request):
 
 def get_people():
     people = {}
-    for person in Person.objects.all():
+    for person in Person.people.all():
         people[person.pk] = person.name
     return people
 
@@ -21,7 +21,7 @@ def get_people():
 def get_people_signin_status():
     # signed_in determines if it gets signed in people (True) or signed out people (False)
     people = {}     # dict with pk as key and name as value
-    for person in Person.objects.all():
+    for person in Person.people.all():
         if person.signin_set.count() == 0:
             # if a person has no sign ins, treat them as signed out
             people[person.pk] = {"name": person.name, "signed_in": False}
