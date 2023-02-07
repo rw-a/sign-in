@@ -22,12 +22,16 @@ def get_people_signin_status():
     # signed_in determines if it gets signed in people (True) or signed out people (False)
     people = {}     # dict with pk as key and name as value
     for person in Person.people.all():
+        name = person.name
+        if not person.media_permission:
+            name += "﹒"
+
         if person.signin_set.count() == 0:
             # if a person has no sign ins, treat them as signed out
-            people[person.pk] = {"name": person.name, "signed_in": False}
+            people[person.pk] = {"name": name, "signed_in": False}
         else:
             last_signin = person.signin_set.latest("date")  # gets the most recent sign in/out
-            people[person.pk] = {"name": person.name, "signed_in": last_signin.is_signin}
+            people[person.pk] = {"name": name, "signed_in": last_signin.is_signin}
     return people
 
 
