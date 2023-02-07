@@ -32,7 +32,8 @@ def graph_people(people_ids: list):
 
     fig.update_layout(
         margin=dict(l=20, r=20, t=30, b=20),
-)
+        # dragmode='pan',
+    )
 
     config = {
         'displaylogo': False,
@@ -41,7 +42,7 @@ def graph_people(people_ids: list):
             'filename': 'Sign-in Graph',
             'scale': 2
         },
-        'modeBarButtonsToRemove': ['autoScale']
+        'modeBarButtonsToRemove': ['autoScale'],
     }
 
     return fig.to_html(full_html=False, config=config, include_plotlyjs='cdn', default_height=680)
