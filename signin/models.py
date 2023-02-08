@@ -10,8 +10,8 @@ class PersonManager(models.Manager):
 class Person(models.Model):
     name = models.CharField(max_length=100, verbose_name="Full Name")
     last_name = models.CharField(max_length=100, editable=False)
-    emergency_contact_name = models.CharField(blank=True, max_length=100)
-    emergency_contact_phone_number = models.CharField(blank=True, max_length=20)
+    emergency_contact_name = models.CharField(max_length=100, blank=True)
+    emergency_contact_phone_number = models.CharField(max_length=20, blank=True)
     media_permission = models.BooleanField(default=False)
     hidden = models.BooleanField(default=False)
     date_added = models.DateTimeField(default=timezone.now)
