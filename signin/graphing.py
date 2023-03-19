@@ -2,6 +2,25 @@ import plotly.graph_objects as go
 from .models import Person, Signin
 
 
+def generate_graph(fig: go.Figure):
+    fig.update_layout(
+        margin=dict(l=20, r=20, t=30, b=20),
+        # dragmode='pan',
+    )
+
+    config = {
+        'displaylogo': False,
+        'toImageButtonOptions': {
+            'format': 'png',
+            'filename': 'Sign-in Graph',
+            'scale': 2
+        },
+        'modeBarButtonsToRemove': ['autoScale'],
+    }
+
+    return fig.to_html(full_html=False, config=config, include_plotlyjs='cdn', default_height=680)
+
+
 def graph_people(people_ids: list):
     people = [Person.objects.get(pk=pk) for pk in people_ids]   # converts the list of ids into a list of Person objects
     dates = Signin.objects.dates('date', 'day')
@@ -23,22 +42,7 @@ def graph_people(people_ids: list):
         xgap=1, ygap=1
     ))
 
-    fig.update_layout(
-        margin=dict(l=20, r=20, t=30, b=20),
-        # dragmode='pan',
-    )
-
-    config = {
-        'displaylogo': False,
-        'toImageButtonOptions': {
-            'format': 'png',
-            'filename': 'Sign-in Graph',
-            'scale': 2
-        },
-        'modeBarButtonsToRemove': ['autoScale'],
-    }
-
-    return fig.to_html(full_html=False, config=config, include_plotlyjs='cdn', default_height=680)
+    return generate_graph(fig)
 
 
 def graph_events():
@@ -53,22 +57,7 @@ def graph_events():
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='lines'))
 
-    fig.update_layout(
-        margin=dict(l=20, r=20, t=30, b=20),
-        # dragmode='pan',
-    )
-
-    config = {
-        'displaylogo': False,
-        'toImageButtonOptions': {
-            'format': 'png',
-            'filename': 'Sign-in Graph',
-            'scale': 2
-        },
-        'modeBarButtonsToRemove': ['autoScale'],
-    }
-
-    return fig.to_html(full_html=False, config=config, include_plotlyjs='cdn', default_height=680)
+    return generate_graph(fig)
 
 
 def get_last_event_num() -> int:
