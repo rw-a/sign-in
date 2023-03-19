@@ -13,5 +13,6 @@ urlpatterns = [
     path('generateqr/', views.generate_qr_page, name='generateqr'),
     path('graph/', views.graph_page, name='graph'),
     path('api/signin', views.signin_request, name='signin_request'),
-    path('api/graph', views.graph_request, name='graph_request')
+    path('api/graph_people', views.graph_people_request, name='graph_people_request'),
+    path('api/graph_events', views.graph_events_request, name='graph_events_request'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
