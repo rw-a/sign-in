@@ -3,6 +3,9 @@ from .models import Person, Signin
 
 
 def generate_graph(fig: go.Figure):
+    """
+    Edits the layout and config of graph to be nicer, then returns graph as plotly.js (html)
+    """
     fig.update_layout(
         margin=dict(l=20, r=20, t=30, b=20),
         # dragmode='pan',
@@ -22,6 +25,12 @@ def generate_graph(fig: go.Figure):
 
 
 def graph_people(people_ids: list):
+    """
+    Generates a heatmap
+    x = dates of events
+    y = people
+    z = if they attended that date or not (1 or 0)
+    """
     people = [Person.objects.get(pk=pk) for pk in people_ids]   # converts the list of ids into a list of Person objects
     dates = Signin.objects.dates('date', 'day')
 
@@ -46,13 +55,18 @@ def graph_people(people_ids: list):
 
 
 def graph_events():
+    """
+    Generates a line graph
+    x = dates of events
+    y = number of people who signed in on that day
+    """
     dates = Signin.objects.dates('date', 'day')
 
     x = []
     y = []
     for date in dates:
         x.append(date.strftime("%a %d/%m/%y"))
-        y.append(Signin.objects.filter(date__date=date).count())
+        y.append(Person.objects.filter(signin__date__date=date).distinct().count())
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='lines'))
@@ -66,4 +80,4 @@ def get_last_event_num() -> int:
     """
     last_event = Signin.objects.latest('date')
     date = last_event.date
-    return Signin.objects.filter(date__date=date).count()
+    return Person.objects.filter(signin__date__date=date).distinct().count()
