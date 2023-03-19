@@ -12,7 +12,7 @@ class Person(models.Model):
     last_name = models.CharField(max_length=100, editable=False)
     emergency_contact_name = models.CharField(blank=True, max_length=100)
     emergency_contact_phone_number = models.CharField(blank=True, max_length=20)
-    media_permission = models.BooleanField(default=False)
+    media_permission = models.BooleanField(default=False, verbose_name="Do you give media permission?")
     hidden = models.BooleanField(default=False)
     date_added = models.DateTimeField(default=timezone.now)
 
