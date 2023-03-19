@@ -70,6 +70,7 @@ def graph_events():
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='lines'))
+    fig.update_yaxes(rangemode="tozero")
 
     return generate_graph(fig)
 
