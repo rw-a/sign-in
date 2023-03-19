@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Person, Signin
-from .graphing import graph_people, graph_events
+from .graphing import graph_people, graph_events, get_last_event_num
 
 
 def index(request):
@@ -66,9 +66,15 @@ def generate_qr_page(request):
 
 
 @staff_member_required
-def graph_page(request):
-    context = {"page": "graph", "people": get_people()}
-    return render(request, 'signin/graph.html', context)
+def graph_events_page(request):
+    context = {"page": "graph"}
+    return render(request, 'signin/graph_events.html', context)
+
+
+@staff_member_required
+def graph_people_page(request):
+    context = {"people": get_people()}
+    return render(request, 'signin/graph_people.html', context)
 
 
 @staff_member_required
@@ -89,13 +95,14 @@ def signin_request(request):    # this also handles signout requests
 
 
 @staff_member_required
+def graph_events_request(request):
+    events_graphs = graph_events()
+    last_event = get_last_event_num()
+    return JsonResponse({"events_graph": events_graphs, "last_event": last_event})
+
+
+@staff_member_required
 def graph_people_request(request):
     data = json.loads(request.body)
     people_graph = graph_people(data['people_ids'])
     return JsonResponse({"people_graph": people_graph})
-
-
-@staff_member_required
-def graph_events_request(request):
-    event_graphs = graph_events()
-    return JsonResponse({"event_graph": event_graphs})

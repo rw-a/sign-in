@@ -48,7 +48,7 @@ def graph_events():
     y = []
     for date in dates:
         x.append(date.strftime("%a %d/%m/%y"))
-        y.append(Signin.objects.filter(date__dat=date))
+        y.append(Signin.objects.filter(date__date=date).count())
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='lines'))
@@ -69,3 +69,12 @@ def graph_events():
     }
 
     return fig.to_html(full_html=False, config=config, include_plotlyjs='cdn', default_height=680)
+
+
+def get_last_event_num() -> int:
+    """
+    Returns the number of people who attended the last event.
+    """
+    last_event = Signin.objects.latest('date')
+    date = last_event.date
+    return Signin.objects.filter(date__date=date).count()
