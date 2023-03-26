@@ -89,6 +89,9 @@
             }
         }
         updatePeopleCount();
+
+        const fontSize = window.localStorage.getItem("{% if is_signin %}signIn{% else %}signOut{% endif %}FontSize");
+        document.querySelector('html').style.fontSize = `${fontSize}px`;
     </script>
 </body>
 </html>
