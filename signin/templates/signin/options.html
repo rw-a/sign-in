@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Options</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body>
+    {% include "signin/navbar.html" %}
+    <div class="container-md my-3 px-3">
+        <h1>Options</h1>
+        <div>
+            <h4>Font Size</h4>
+            <label for="signInFontSize">Sign In:</label>
+            <input id="signInFontSize" type="number" min="10" max="30">
+            <br>
+
+            <label for="signOutFontSize">Sign Out:</label>
+            <input id="signOutFontSize" type="number" min="10" max="30">
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        const storage = window.localStorage;
+
+        const fontSizeInputs = ["signInFontSize", "signOutFontSize"];     // IDs for input elements of type number
+        initialiseNumberInputs(fontSizeInputs, 16);
+
+        function initialiseNumberInputs(numberInputs, defaultValue) {
+            // automatically generates default values and event handlers for number inputs
+            for (const numberInputID of numberInputs) {
+                const numberInputElement = document.getElementById(numberInputID);
+                let numberInputValue = storage.getItem(numberInputID);
+                numberInputElement.value = (numberInputValue) ? numberInputValue : defaultValue;  // sets default to 16
+                numberInputElement.addEventListener('change', (event) => {
+                    numberInputValue = event.target.value;
+                    storage.setItem(numberInputID, numberInputValue);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

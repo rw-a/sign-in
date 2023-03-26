@@ -78,6 +78,12 @@ def graph_people_page(request):
 
 
 @staff_member_required
+def options_page(request):
+    context = {"page": "options"}
+    return render(request, 'signin/options.html', context)
+
+
+@staff_member_required
 def signin_request(request):    # this also handles signout requests
     if request.method == "POST":
         data = json.loads(request.body)

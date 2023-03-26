@@ -13,6 +13,7 @@ urlpatterns = [
     path('generateqr/', views.generate_qr_page, name='generateqr'),
     path('graph/', views.graph_events_page, name='graph'),
     path('graph_people/', views.graph_people_page, name='graph_people'),
+    path('options/', views.options_page, name='options'),
     path('api/signin', views.signin_request, name='signin_request'),
     path('api/graph_events', views.graph_events_request, name='graph_events_request'),
     path('api/graph_people', views.graph_people_request, name='graph_people_request'),
