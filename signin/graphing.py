@@ -66,7 +66,7 @@ def graph_events():
     y = []
     for date in dates:
         x.append(date.strftime("%a %d/%m/%y"))
-        y.append(Person.objects.filter(signin__date__date=date).distinct().count())
+        y.append(Person.objects.filter(signin__date__date=date, signin__is_signin=True).distinct().count())
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='lines'))
@@ -81,4 +81,4 @@ def get_last_event_num() -> int:
     """
     last_event = Signin.objects.latest('date')
     date = last_event.date
-    return Person.objects.filter(signin__date__date=date).distinct().count()
+    return Person.objects.filter(signin__date__date=date, signin__is_signin=True).distinct().count()
