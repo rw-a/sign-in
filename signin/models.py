@@ -22,7 +22,7 @@ class Person(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "People"
-        ordering = ['last_name']
+        ordering = ['last_name', 'name']
 
     def __str__(self):
         return self.name
