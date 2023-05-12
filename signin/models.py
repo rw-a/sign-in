@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.functions import Upper
 from django.contrib import admin
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 class PersonManager(models.Manager):
@@ -24,16 +25,33 @@ class Person(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "People"
+        # sort by last name, then first name, ignoring all case
         ordering = [Upper('last_name'), Upper('first_name')]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['first_name', 'last_name'],
+                name="%(app_label)s_%(class)s_unique"
+            )
+        ]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-    # sort by last name, then first name, ignoring all case
     @property
     @admin.display
     def name(self):
         return f"{self.first_name} {self.last_name}"
+
+    def save(self, *args, **kwargs):
+        self.first_name = self.first_name.title().strip()
+        self.last_name = self.last_name.title().strip()
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        if Person.objects.filter(first_name__iexact=self.first_name,
+                                 last_name__iexact=self.last_name).exists():
+            raise ValidationError(f"Person {self.first_name} {self.last_name} already exists.")
 
 
 class Signin(models.Model):
