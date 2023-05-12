@@ -7,12 +7,8 @@ class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'emergency_contact_name', 'emergency_contact_phone_number',
                     'media_permission', 'hidden', 'pk')
     date_hierarchy = "date_added"
-    actions = ('resave', 'allow_media_permission', 'disallow_media_permission', 'hide', 'unhide')
-
-    @admin.action(description='Resave selected people (refreshes last names)')
-    def resave(self, request, queryset):
-        for obj in queryset:
-            obj.save()
+    actions = ('allow_media_permission', 'disallow_media_permission', 'hide', 'unhide')
+    list_filter = ["hidden", "media_permission"]
 
     @admin.action(description='Set selected people to give media permission')
     def allow_media_permission(self, request, queryset):

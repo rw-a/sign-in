@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.functions import Upper
+from django.contrib import admin
 from django.utils import timezone
 
 
@@ -8,10 +10,10 @@ class PersonManager(models.Manager):
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Full Name")
-    last_name = models.CharField(max_length=100, editable=False)
-    emergency_contact_name = models.CharField(blank=True, max_length=100)
-    emergency_contact_phone_number = models.CharField(blank=True, max_length=20)
+    first_name = models.CharField(max_length=100, verbose_name="First Name")
+    last_name = models.CharField(max_length=100, verbose_name="Last Name")
+    emergency_contact_name = models.CharField(max_length=100, blank=True,)
+    emergency_contact_phone_number = models.CharField(max_length=20, blank=True)
     media_permission = models.BooleanField(default=False, verbose_name="Do you give media permission?")
     hidden = models.BooleanField(default=False)
     date_added = models.DateTimeField(default=timezone.now)
@@ -22,14 +24,16 @@ class Person(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "People"
-        ordering = ['last_name', 'name']
+        ordering = [Upper('last_name'), Upper('first_name')]
 
     def __str__(self):
-        return self.name
+        return f"{self.first_name} {self.last_name}"
 
-    def save(self, *args, **kwargs):
-        self.last_name = self.name.split(" ")[-1]
-        super().save(*args, **kwargs)
+    # sort by last name, then first name, ignoring all case
+    @property
+    @admin.display
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Signin(models.Model):
