@@ -45,7 +45,7 @@ class Person(models.Model):
         super().clean()
         if Person.objects.filter(first_name__iexact=self.first_name,
                                  last_name__iexact=self.last_name).exclude(pk=self.pk).exists():
-            raise ValidationError(f"Person {self.first_name} {self.last_name} already exists.")
+            raise ValidationError(f"{self.first_name} {self.last_name} already exists.")
 
 
 class Signin(models.Model):
