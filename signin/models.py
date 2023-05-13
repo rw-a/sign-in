@@ -50,7 +50,7 @@ class Person(models.Model):
     def clean(self):
         super().clean()
         if Person.objects.filter(first_name__iexact=self.first_name,
-                                 last_name__iexact=self.last_name).exists():
+                                 last_name__iexact=self.last_name).exclude(pk=self.pk).exists():
             raise ValidationError(f"Person {self.first_name} {self.last_name} already exists.")
 
 
