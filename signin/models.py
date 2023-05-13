@@ -27,12 +27,6 @@ class Person(models.Model):
         verbose_name_plural = "People"
         # sort by last name, then first name, ignoring all case
         ordering = [Upper('last_name'), Upper('first_name')]
-        constraints = [
-            models.UniqueConstraint(
-                fields=['first_name', 'last_name'],
-                name="%(app_label)s_%(class)s_unique"
-            )
-        ]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -43,8 +37,8 @@ class Person(models.Model):
         return f"{self.first_name} {self.last_name}"
 
     def save(self, *args, **kwargs):
-        self.first_name = self.first_name.title().strip()
-        self.last_name = self.last_name.title().strip()
+        self.first_name = self.first_name.title()
+        self.last_name = self.last_name.title()
         super().save(*args, **kwargs)
 
     def clean(self):
