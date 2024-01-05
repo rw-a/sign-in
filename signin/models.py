@@ -13,10 +13,15 @@ class PersonManager(models.Manager):
 class Person(models.Model):
     first_name = models.CharField(max_length=100, verbose_name="First Name")
     last_name = models.CharField(max_length=100, verbose_name="Last Name")
-    emergency_contact_name = models.CharField(max_length=100, blank=True,)
+
+    emergency_contact_first_name = models.CharField(max_length=100, blank=True)
+    emergency_contact_last_name = models.CharField(max_length=100, blank=True)
     emergency_contact_phone_number = models.CharField(max_length=20, blank=True)
+
     media_permission = models.BooleanField(default=False, verbose_name="Do you give media permission?")
+
     hidden = models.BooleanField(default=False)
+
     date_added = models.DateTimeField(default=timezone.now)
 
     objects = models.Manager()
@@ -35,6 +40,11 @@ class Person(models.Model):
     @admin.display
     def name(self):
         return f"{self.first_name} {self.last_name}"
+
+    @property
+    @admin.display
+    def emergency_contact_name(self):
+        return f"{self.emergency_contact_first_name} {self.emergency_contact_last_name}"
 
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.title()
