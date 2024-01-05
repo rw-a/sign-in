@@ -4,7 +4,7 @@ from .models import Person, Session, Signin
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_time', 'end_time')
+    list_display = ('name', 'sign_in_time', 'sign_out_time', 'end_time')
 
 
 @admin.register(Person)
