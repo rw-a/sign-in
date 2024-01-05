@@ -75,9 +75,15 @@ class Person(models.Model):
 
 
 class Signin(models.Model):
-    is_signin = models.BooleanField(choices=[(True, "Sign in"), (False, "Sign out")], verbose_name="Sign in/out")
+    is_signin = models.BooleanField(choices=[
+        (True, "Sign in"),
+        (False, "Sign out")
+    ], verbose_name="Sign In/Out")
+
     date = models.DateTimeField(default=timezone.now)
+
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name = "Sign In/Out"
