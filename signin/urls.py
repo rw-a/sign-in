@@ -10,10 +10,6 @@ urlpatterns = [
     path('signin/', views.signin_page, name='signin'),
     path('signout/', views.signout_page, name='signout'),
 
-    path('qrsignin/', views.qr_signin_page, name='qrsignin'),
-    path('qrsignout/', views.qr_signout_page, name='qrsignout'),
-    path('generateqr/', views.generate_qr_page, name='generateqr'),
-
     path('graph/', views.graph_events_page, name='graph'),
     path('graph_people/', views.graph_people_page, name='graph_people'),
 

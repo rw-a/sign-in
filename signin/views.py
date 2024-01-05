@@ -50,24 +50,6 @@ def signout_page(request):
 
 
 @staff_member_required
-def qr_signin_page(request):
-    context = {"page": "qrsignin", "is_signin": True}
-    return render(request, 'signin/qrsignin.html', context)
-
-
-@staff_member_required
-def qr_signout_page(request):
-    context = {"page": "qrsignout", "is_signin": False}
-    return render(request, 'signin/qrsignin.html', context)
-
-
-@staff_member_required
-def generate_qr_page(request):
-    context = {"page": "generateqr", "people": get_people()}
-    return render(request, 'signin/generateqr.html', context)
-
-
-@staff_member_required
 def graph_events_page(request):
     context = {"page": "graph"}
     return render(request, 'signin/graph_events.html', context)
