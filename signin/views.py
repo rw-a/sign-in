@@ -3,7 +3,9 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import Person, Signin
+from rest_framework.views import APIView
+from rest_framework.request import Request
+from .models import Person, Session, Signin
 from .graphing import graph_people, graph_events, get_last_event_num
 
 
@@ -83,32 +85,34 @@ def options_page(request):
     return render(request, 'signin/options.html', context)
 
 
-@staff_member_required
-def signin_request(request):    # this also handles signout requests
-    if request.method == "POST":
+class SignInHandler(APIView):
+    """
+    Handles Sign In/Out requests.
+    """
+    def post(self, request: Request):
         data = json.loads(request.body)
+
         try:
             person = Person.objects.get(pk=data['pk'])
-        except (ValueError, Person.DoesNotExist):
-            try:
-                # if the getting someone by id doesn't work, try using their name (for legacy qr codes)
-                person = Person.objects.get(name=data['pk'])
-            except (ValueError, Person.DoesNotExist):
-                return JsonResponse({"success": "false"})
-        signin = Signin(is_signin=data['is_signin'], person=person)
+            session = Session.objects.get(name=data['session'])
+        except (ValueError, Person.DoesNotExist, Session.DoesNotExist):
+            return JsonResponse({"success": "false"})
+
+        signin = Signin(is_signin=data['is_signin'], person=person, session=session)
         signin.save()
+
         return JsonResponse({"success": "true", "person": person.name})
 
 
-@staff_member_required
-def graph_events_request(request):
-    events_graphs = graph_events()
-    last_event = get_last_event_num()
-    return JsonResponse({"events_graph": events_graphs, "last_event": last_event})
+class GraphEventsHandler(APIView):
+    def put(self, request: Request):
+        events_graphs = graph_events()
+        last_event = get_last_event_num()
+        return JsonResponse({"events_graph": events_graphs, "last_event": last_event})
 
 
-@staff_member_required
-def graph_people_request(request):
-    data = json.loads(request.body)
-    people_graph = graph_people(data['people_ids'])
-    return JsonResponse({"people_graph": people_graph})
+class GraphPeopleHandler(APIView):
+    def put(self, request: Request):
+        data = json.loads(request.body)
+        people_graph = graph_people(data['people_ids'])
+        return JsonResponse({"people_graph": people_graph})

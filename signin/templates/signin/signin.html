@@ -76,7 +76,7 @@
         function signIn(element) {
             let is_signin = element.checked;
             fetch("{% url 'signin:signin_request' %}", {
-                method: 'POST', // or 'PUT'
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     "X-CSRFToken": '{{csrf_token}}'

@@ -63,7 +63,7 @@
                 document.getElementById('error').hidden = true;
             }
             fetch("{% url 'signin:graph_people_request' %}", {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     "X-CSRFToken": '{{csrf_token}}'

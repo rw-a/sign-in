@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 
 class Session(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, primary_key=True)
 
     sign_in_time = models.TimeField(help_text="The time when people can start signing in to this session.")
     sign_out_time = models.TimeField(help_text="The time when people can start signing out of this session.")
