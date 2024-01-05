@@ -1,14 +1,23 @@
 from django.contrib import admin
-from .models import Person, Signin
+from .models import Person, Session, Signin
+
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'start_time', 'end_time')
 
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'emergency_contact_name', 'emergency_contact_phone_number',
-                    'media_permission', 'hidden', 'pk')
+                    'media_permission', 'person_sessions', 'hidden', 'pk')
     date_hierarchy = "date_added"
     actions = ('allow_media_permission', 'disallow_media_permission', 'hide', 'unhide')
     list_filter = ["hidden", "media_permission"]
+
+    @admin.display
+    def person_sessions(self, obj: Person):
+        return [session for session in obj.sessions.all()]
 
     @admin.action(description='Set selected people to give media permission')
     def allow_media_permission(self, request, queryset):

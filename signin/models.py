@@ -5,6 +5,21 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 
+class Session(models.Model):
+    name = models.CharField(max_length=100)
+
+    start_time = models.TimeField(verbose_name="Sign In Start Time",
+                                  help_text="The time when people can start signing in to this session.")
+    end_time = models.TimeField(verbose_name="Sign Out Start Time",
+                                help_text="The time when people can start signing out of this session.")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ("name",)
+
+
 class PersonManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(hidden=False)
@@ -20,8 +35,9 @@ class Person(models.Model):
 
     media_permission = models.BooleanField(default=False, verbose_name="Do you give media permission?")
 
-    hidden = models.BooleanField(default=False)
+    sessions = models.ManyToManyField(Session)
 
+    hidden = models.BooleanField(default=False)
     date_added = models.DateTimeField(default=timezone.now)
 
     objects = models.Manager()
@@ -64,8 +80,8 @@ class Signin(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = "Sign in/out"
-        ordering = ['-date']
+        verbose_name = "Sign In/Out"
+        ordering = ('-date',)
 
     def __str__(self):
         return f"{self.person} - {'Sign In' if self.is_signin else 'Sign Out'}"
