@@ -3,10 +3,16 @@ from django.db.models.functions import Upper
 from django.contrib import admin
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 
 class Session(models.Model):
-    name = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=100, primary_key=True,
+                            validators=[
+                                RegexValidator('[a-zA-Z0-9_]',
+                                               message="Only alphanumeric characters and underscores are allowed.")
+                            ])
 
     sign_in_time = models.TimeField(help_text="The time when people can start signing in to this session.")
     sign_out_time = models.TimeField(help_text="The time when people can start signing out of this session.")

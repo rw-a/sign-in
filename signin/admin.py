@@ -4,7 +4,7 @@ from .models import Person, Session, Signin
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'sign_in_time', 'sign_out_time', 'end_time')
+    list_display = ('name', 'code', 'sign_in_time', 'sign_out_time', 'end_time')
 
 
 @admin.register(Person)
@@ -13,7 +13,7 @@ class PersonAdmin(admin.ModelAdmin):
                     'media_permission', 'person_sessions', 'hidden', 'pk')
     date_hierarchy = "date_added"
     actions = ('allow_media_permission', 'disallow_media_permission', 'hide', 'unhide')
-    list_filter = ["hidden", "media_permission"]
+    list_filter = ("hidden", "media_permission")
 
     @admin.display
     def person_sessions(self, obj: Person):
@@ -48,7 +48,7 @@ class PersonAdmin(admin.ModelAdmin):
 class SigninAdmin(admin.ModelAdmin):
     list_display = ('person', 'is_signin', 'date')
     date_hierarchy = "date"
-    list_filter = ["is_signin"]
+    list_filter = ("is_signin",)
 
 
 admin.site.site_header = "Sign In/Out System"
