@@ -89,18 +89,27 @@ def signin_page(request, *args, **kwargs):
 
 @staff_member_required
 def graph_events_page(request):
-    return render(request, 'signin/graph_events.html')
+    context = {
+        "all_sessions": Session.objects.all(),
+    }
+    return render(request, 'signin/graph_events.html', context)
 
 
 @staff_member_required
 def graph_people_page(request):
-    context = {"people": get_people()}
+    context = {
+        "all_sessions": Session.objects.all(),
+        "people": get_people()
+    }
     return render(request, 'signin/graph_people.html', context)
 
 
 @staff_member_required
 def options_page(request):
-    return render(request, 'signin/options.html')
+    context = {
+        "all_sessions": Session.objects.all(),
+    }
+    return render(request, 'signin/options.html', context)
 
 
 class SignInHandler(APIView):

@@ -21,7 +21,7 @@
     }
 </style>
 <body>
-    {% include "signin/navbar.html" %}
+    {% include "signin/navbar.html" with sessions=all_sessions %}
     <div class="container-md my-3 px-3" id="container">
         <div class="row">
             <h2>Generate Graph</h2>

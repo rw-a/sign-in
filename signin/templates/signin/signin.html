@@ -54,7 +54,7 @@
     {% endif %}
 </style>
 <body>
-    {% include "signin/navbar.html" with sessions=all_sessions current_session=current_session%}
+    {% include "signin/navbar.html" with sessions=all_sessions current_session=current_session %}
     <div class="container-md my-3 px-3">
         <h1>Sign {% if is_sign_in_time %}In to{% else %}Out of{% endif %} {{ current_session.name }}</h1>
         <p id="peopleCount" class="text-secondary"></p>
