@@ -20,17 +20,13 @@ def signin_page(request, *args, **kwargs):
         try:
             session = Session.objects.get(code=kwargs["session"].lower())
         except Session.DoesNotExist:
-            # TODO: Show a page listing possible sessions to redirect to
-            return HttpResponseNotFound()
+            session = get_default_session()
+            return HttpResponseRedirect(reverse('signin:signin_session', args=[session.code]))
 
     else:
         # No session provided, so default to one (currently arbitrary)
-        active_sessions = get_active_sessions()
-
-        if len(active_sessions) > 0:
-            session = active_sessions.latest("sign_in_time")
-        else:
-            session = Session.objects.all().latest("sign_in_time")
+        session = get_default_session()
+        return HttpResponseRedirect(reverse('signin:signin_session', args=[session.code]))
 
     context = {
         "people": get_people_signin_status(session),
