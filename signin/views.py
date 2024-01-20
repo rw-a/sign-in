@@ -117,16 +117,17 @@ class SignInHandler(APIView):
     Handles Sign In/Out requests.
     """
     def post(self, request: Request):
-        data = json.loads(request.body)
-
         try:
-            person = Person.objects.get(pk=data['pk'])
-            session = Session.objects.get(name=data['session'])
+            person = Person.objects.get(pk=request.data['pk'])
+            session = Session.objects.get(code=request.data['session'])
         except (ValueError, Person.DoesNotExist, Session.DoesNotExist):
             return JsonResponse({"success": "false"})
 
-        signin = Signin(is_signin=data['is_signin'], person=person, session=session)
-        signin.save()
+        Signin.objects.create(
+            is_signin=request.data['is_signin'],
+            person=person,
+            session=session
+        )
 
         return JsonResponse({"success": "true", "person": person.name})
 

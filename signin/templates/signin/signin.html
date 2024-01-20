@@ -81,7 +81,11 @@
                     "X-CSRFToken": '{{csrf_token}}'
             },
                 credentials: 'same-origin',
-                body: JSON.stringify({pk: element.value, is_signin: is_signin}),
+                body: JSON.stringify({
+                    pk: element.value,
+                    is_signin: is_signin,
+                    session: "{{ current_session.code }}"
+                }),
             })
             .then((response) => response.json())
             .then((data) => {
