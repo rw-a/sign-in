@@ -1,62 +1,17 @@
 import json
-from typing import TypedDict
 from django.urls import reverse
 from django.shortcuts import render
-from django.utils import timezone
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.contrib.admin.views.decorators import staff_member_required
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from .models import Person, Session, Signin
 from .graphing import graph_people, graph_events, get_last_event_num
+from .sessions import get_default_session, get_people_signin_status, get_people, is_sign_in_time
 
 
 def index(request):
     return HttpResponseRedirect(reverse('signin:signin_default'))
-
-
-def get_people():
-    people = {}
-    for person in Person.actives.all():
-        people[person.pk] = person.name
-    return people
-
-
-def get_people_signin_status(session: Session):
-    class PersonType(TypedDict):
-        name: str
-        signed_in: bool
-
-    # signed_in determines if it gets signed in people (True) or signed out people (False)
-    people: dict[str, PersonType] = {}     # dict with pk as key and name as value
-
-    for person in session.person_set.filter(hidden=False):
-        name = person.name
-        if not person.media_permission:
-            name += "﹒"
-
-        person_signins = person.signin_set.filter(session=session)
-
-        if person_signins.count() == 0:
-            # if a person has no sign ins, treat them as signed out
-            people[person.pk] = {"name": name, "signed_in": False}
-        else:
-            last_signin = person_signins.latest("date")  # gets the most recent sign in/out
-            people[person.pk] = {"name": name, "signed_in": last_signin.is_signin}
-    return people
-
-
-def get_active_sessions():
-    current_time = timezone.now().time()
-
-    return Session.objects.all()\
-        .filter(sign_in_time__lte=current_time)\
-        .filter(end_time__gt=current_time)
-
-
-def is_sign_in_time(session: Session) -> bool:
-    current_time = timezone.now().time()
-    return current_time < session.sign_out_time
 
 
 @staff_member_required
