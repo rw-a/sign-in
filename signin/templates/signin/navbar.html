@@ -5,8 +5,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="/signin" class="nav-item nav-link {% if page == 'signin' %}active{% endif %}">Sign In</a>
-                <a href="/signout" class="nav-item nav-link {% if page == 'signout' %}active{% endif %}">Sign Out</a>
+                {% for session in sessions %}
+                <a href="/signin/{{ session.code }}" class="nav-item nav-link {% if session.name == current_session.name %}active{% endif %}">{{ session.name }}</a>
+                {% endfor %}
             </div>
             <div class="navbar-nav ms-auto">
                 <div class="nav-item dropdown">

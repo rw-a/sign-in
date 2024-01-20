@@ -54,13 +54,13 @@
     {% endif %}
 </style>
 <body>
-    {% include "signin/navbar.html" %}
+    {% include "signin/navbar.html" with sessions=all_sessions current_session=current_session%}
     <div class="container-md my-3 px-3">
-        <h1>Sign {% if is_signin %}In{% else %}Out{% endif %}</h1>
+        <h1>Sign Into {{ current_session.name }}</h1>
         <p id="peopleCount" class="text-secondary"></p>
         <ul class="list-unstyled">
             {% for pk, person in people.items %}
-            {% if is_signin or person.signed_in %}
+            {% if person.signed_in %}
             <li>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="{{ pk }}" value="{{ pk }}" title="{{ person.name }}" onclick="signIn(this)" {% if person.signed_in %}checked{% endif %}>
