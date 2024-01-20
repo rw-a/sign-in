@@ -13,8 +13,8 @@ class Session(models.Model):
         primary_key=True,
         validators=[
             RegexValidator(
-                '[a-zA-Z0-9_]',
-                message="Only alphanumeric characters and underscores are allowed."
+                '[a-z0-9_]',
+                message="Only lower letters, numbers and underscores are allowed."
             )
         ])
 
@@ -81,6 +81,10 @@ class Person(models.Model):
         return f"{self.emergency_contact_first_name} {self.emergency_contact_last_name}"
 
     def save(self, *args, **kwargs):
+        """
+        Ensure names are in correct case (may break names with capital in the middle,
+        e.g. MacDonald)
+        """
         self.first_name = self.first_name.title()
         self.last_name = self.last_name.title()
         super().save(*args, **kwargs)
