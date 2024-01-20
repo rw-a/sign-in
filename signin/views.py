@@ -22,54 +22,13 @@ def get_people():
     return people
 
 
-"""def get_sessions():
-    pk = str
-
+def get_people_signin_status(session: Session):
     class PersonType(TypedDict):
         name: str
         signed_in: bool
 
-    class SessionType(TypedDict):
-        is_signin: bool
-        people: dict[pk, PersonType]
-
-    sessions: list[SessionType] = []
-
-    # For each active sessions (assume sign_in_time is always earliest)
-    current_time = timezone.now()
-    for session in Session.objects.all()\
-            .filter(sign_in_time_lte=current_time)\
-            .filter(end_time_gt=current_time)\
-            .time():
-
-        # True if it is time for people to be signing in (False if signing out)
-        is_signin = current_time < session.sign_out_time
-
-        # Get the people in the session
-        # signed_in determines if it gets signed in people (True) or signed out people (False)
-        people: dict[pk, PersonType] = {}
-        for person in Person.people.all():
-            name = person.name
-            if not person.media_permission:
-                name += "﹒"
-
-            person_signins = person.signin_set.filter(session=session)
-
-            if person_signins.count() == 0:
-                # if a person has no sign ins, treat them as signed out
-                people[person.pk] = {"name": name, "signed_in": False}
-            else:
-                last_signin = person_signins.latest("date")  # gets the most recent sign in/out
-                people[person.pk] = {"name": name, "signed_in": last_signin.is_signin}
-
-        sessions.append({"is_signin": is_signin, "people": people})
-
-    return sessions"""
-
-
-def get_people_signin_status(session: Session):
     # signed_in determines if it gets signed in people (True) or signed out people (False)
-    people = {}     # dict with pk as key and name as value
+    people: dict[str, PersonType] = {}     # dict with pk as key and name as value
 
     for person in Person.people.all():
         name = person.name
@@ -85,26 +44,6 @@ def get_people_signin_status(session: Session):
             last_signin = person_signins.latest("date")  # gets the most recent sign in/out
             people[person.pk] = {"name": name, "signed_in": last_signin.is_signin}
     return people
-
-
-"""def get_active_sessions():
-    class SessionType(TypedDict):
-        name: str
-        is_signin: bool
-
-    sessions: dict[str, SessionType] = {}
-
-    current_time = timezone.now().time()
-    for session in Session.objects.all() \
-            .filter(sign_in_time_lte=current_time) \
-            .filter(end_time_gt=current_time):
-
-        # True if it is time for people to be signing in (False if signing out)
-        is_signin = current_time < session.sign_out_time
-
-        sessions[session.code] = {'name': session.name, 'is_signin': is_signin}
-
-    return sessions"""
 
 
 def get_active_sessions():
