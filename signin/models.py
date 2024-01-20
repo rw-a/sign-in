@@ -8,15 +8,25 @@ from django.core.validators import RegexValidator
 
 class Session(models.Model):
     name = models.CharField(max_length=100)
-    code = models.CharField(max_length=100, primary_key=True,
-                            validators=[
-                                RegexValidator('[a-zA-Z0-9_]',
-                                               message="Only alphanumeric characters and underscores are allowed.")
-                            ])
+    code = models.CharField(
+        max_length=100,
+        primary_key=True,
+        validators=[
+            RegexValidator(
+                '[a-zA-Z0-9_]',
+                message="Only alphanumeric characters and underscores are allowed."
+            )
+        ])
 
-    sign_in_time = models.TimeField(help_text="The time when people can start signing in to this session.")
-    sign_out_time = models.TimeField(help_text="The time when people can start signing out of this session.")
-    end_time = models.TimeField(help_text="The time when everyone has left, and you can no longer sign in/out.")
+    sign_in_time = models.TimeField(
+        help_text="The time when people can start signing in to this session."
+    )
+    sign_out_time = models.TimeField(
+        help_text="The time when people can start signing out of this session."
+    )
+    end_time = models.TimeField(
+        help_text="The time when everyone has left, and you can no longer sign in/out."
+    )
 
     def __str__(self):
         return self.name
@@ -38,7 +48,10 @@ class Person(models.Model):
     emergency_contact_last_name = models.CharField(max_length=100, blank=True)
     emergency_contact_phone_number = models.CharField(max_length=20, blank=True)
 
-    media_permission = models.BooleanField(default=False, verbose_name="Do you give media permission?")
+    media_permission = models.BooleanField(
+        default=False,
+        verbose_name="Do you give media permission?"
+    )
 
     sessions = models.ManyToManyField(Session)
 
