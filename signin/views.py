@@ -20,8 +20,7 @@ def signin_page(request, *args, **kwargs):
         try:
             session = Session.objects.get(code=kwargs["session"].lower())
         except Session.DoesNotExist:
-            session = get_default_session()
-            return HttpResponseRedirect(reverse('signin:signin_session', args=[session.code]))
+            return HttpResponseNotFound(f"Session '{kwargs['session']}' does not exist")
 
     else:
         # No session provided, so default to one (currently arbitrary)
