@@ -35,7 +35,10 @@ class Session(models.Model):
         ordering = ("name",)
 
 
-class PersonManager(models.Manager):
+class ActivePersonManager(models.Manager):
+    """
+    Object manager which only returns people that are not hidden
+    """
     def get_queryset(self):
         return super().get_queryset().filter(hidden=False)
 
@@ -59,7 +62,7 @@ class Person(models.Model):
     date_added = models.DateTimeField(default=timezone.now)
 
     objects = models.Manager()
-    people = PersonManager()
+    actives = ActivePersonManager()
 
     class Meta:
         verbose_name = "Person"

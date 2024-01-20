@@ -17,7 +17,7 @@ def index(request):
 
 def get_people():
     people = {}
-    for person in Person.people.all():
+    for person in Person.actives.all():
         people[person.pk] = person.name
     return people
 
