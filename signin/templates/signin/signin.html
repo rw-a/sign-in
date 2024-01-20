@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sign {% if is_signin %}In{% else %}Out{% endif %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>{{ current_session.name }} | Sign {% if is_sign_in_time %}In{% else %}Out{% endif %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <style>
     :root {
@@ -44,7 +44,7 @@
         }
     }
 
-    {% if is_signin %}
+    {% if not is_sign_in_time %}
     input[type="checkbox"]:checked {
         opacity: 0.3;
     }
@@ -56,25 +56,24 @@
 <body>
     {% include "signin/navbar.html" with sessions=all_sessions current_session=current_session%}
     <div class="container-md my-3 px-3">
-        <h1>Sign Into {{ current_session.name }}</h1>
+        <h1>Sign {% if is_sign_in_time %}In to{% else %}Out of{% endif %} {{ current_session.name }}</h1>
         <p id="peopleCount" class="text-secondary"></p>
         <ul class="list-unstyled">
             {% for pk, person in people.items %}
-            {% if person.signed_in %}
             <li>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="{{ pk }}" value="{{ pk }}" title="{{ person.name }}" onclick="signIn(this)" {% if person.signed_in %}checked{% endif %}>
                     <label class="form-check-label" for="{{ pk }}">{{ person.name }}</label>
                 </div>
             </li>
-            {% endif %}
             {% endfor %}
         </ul>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script>
         function signIn(element) {
-            let is_signin = element.checked;
+            const is_signin = element.checked;
+
             fetch("{% url 'signin:signin_request' %}", {
                 method: 'POST',
                 headers: {
@@ -95,7 +94,7 @@
         }
 
         function updatePeopleCount() {
-            let numPeople = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const numPeople = document.querySelectorAll('input[type="checkbox"]:checked').length;
             if (numPeople > 0) {
                 document.getElementById('peopleCount').innerText = `Signed In: ${numPeople}`;
             } else {
@@ -104,7 +103,7 @@
         }
         updatePeopleCount();
 
-        const fontSize = window.localStorage.getItem("{% if is_signin %}signIn{% else %}signOut{% endif %}FontSize");
+        const fontSize = window.localStorage.getItem("fontSize");
         document.querySelector('html').style.fontSize = `${fontSize}px`;
     </script>
 </body>

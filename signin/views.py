@@ -54,6 +54,11 @@ def get_active_sessions():
         .filter(end_time__gt=current_time)
 
 
+def is_sign_in_time(session: Session) -> bool:
+    current_time = timezone.now().time()
+    return current_time < session.sign_out_time
+
+
 @staff_member_required
 def signin_page(request, *args, **kwargs):
     if "session" in kwargs:
@@ -72,11 +77,11 @@ def signin_page(request, *args, **kwargs):
         else:
             session = Session.objects.all().latest("sign_in_time")
 
-    people = get_people_signin_status(session)
     context = {
-        "people": people,
+        "people": get_people_signin_status(session),
         "current_session": session,
-        "all_sessions": Session.objects.all()
+        "all_sessions": Session.objects.all(),
+        "is_sign_in_time": is_sign_in_time(session)
     }
 
     return render(request, 'signin/signin.html', context)
