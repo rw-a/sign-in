@@ -30,7 +30,7 @@ def get_people_signin_status(session: Session):
     # signed_in determines if it gets signed in people (True) or signed out people (False)
     people: dict[str, PersonType] = {}     # dict with pk as key and name as value
 
-    for person in Person.people.all():
+    for person in session.person_set.filter(hidden=False):
         name = person.name
         if not person.media_permission:
             name += "﹒"
