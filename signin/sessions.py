@@ -49,9 +49,9 @@ def get_default_session():
     active_sessions = get_active_sessions()
 
     if len(active_sessions) > 0:
-        session = active_sessions.latest("sign_in_time")
+        session = active_sessions.earliest("sign_in_time")
     else:
-        session = Session.objects.all().latest("sign_in_time")
+        session = Session.objects.all().earliest("sign_in_time")
 
     return session
 
