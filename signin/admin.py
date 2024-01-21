@@ -46,9 +46,9 @@ class PersonAdmin(admin.ModelAdmin):
 
 @admin.register(Signin)
 class SigninAdmin(admin.ModelAdmin):
-    list_display = ('person', 'is_signin', 'date')
+    list_display = ('person', 'session', 'is_signin', 'date')
     date_hierarchy = "date"
-    list_filter = ("is_signin",)
+    list_filter = ('is_signin', 'session')
 
 
 admin.site.site_header = "Sign In/Out System"
