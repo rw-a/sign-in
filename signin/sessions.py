@@ -1,4 +1,7 @@
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from typing import TypedDict
+from django.conf import settings
 from django.utils import timezone
 from .models import Person, Session
 
@@ -35,7 +38,7 @@ def get_people_signin_status(session: Session):
 
 
 def get_active_sessions():
-    current_time = timezone.now().time()
+    current_time = datetime.now(ZoneInfo(settings.TIME_ZONE)).time()
 
     return Session.objects.all()\
         .filter(sign_in_time__lte=current_time)\
