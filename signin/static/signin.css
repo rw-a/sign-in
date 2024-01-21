@@ -1,0 +1,36 @@
+:root {
+    --label-font-size: 1.3rem;
+}
+
+label {
+    font-size: var(--label-font-size, 1rem);
+}
+
+input[type="checkbox"] {
+    height: var(--label-font-size, 1rem);
+    width: var(--label-font-size, 1rem);
+}
+
+@media (min-width: 992px) {
+    ul {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 992px) {
+     ul {
+      -webkit-column-count: 3;
+      -moz-column-count: 3;
+      column-count: 3;
+    }
+}
+
+@media (max-width: 576px) {
+    ul {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
