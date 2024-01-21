@@ -17,3 +17,7 @@ A website to manage signing in/out of events.
 ## Depreciated Features
 - QR code scanner for quick sign in/out.
 - Built-in QR code generator.
+
+## Technical Overview
+- Django backend using sqlite3 database.
+- Frontend uses Django HTML templates, vanilla JavaScript, and Bootstrap for styling.
