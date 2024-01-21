@@ -6,11 +6,18 @@ from django.utils import timezone
 from .models import Person, Session
 
 
-def get_people():
-    people = {}
-    for person in Person.actives.all():
-        people[person.pk] = person.name
-    return people
+def get_people_by_session():
+    sessions: dict[str, dict[str, str]] = {}
+
+    for session in Session.objects.all():
+        people: dict[str, str] = {}
+
+        for person in session.person_set.filter(hidden=False):
+            people[person.pk] = person.name
+
+        sessions[session.code] = people
+
+    return sessions
 
 
 def get_people_signin_status(session: Session):

@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from .models import Person, Session, Signin
 from .graphing import graph_people, graph_events, get_last_event_num
-from .sessions import get_default_session, get_people_signin_status, get_people, is_sign_in_time
+from .sessions import get_default_session, get_people_signin_status, get_people_by_session, \
+    is_sign_in_time
 
 
 def index(request):
@@ -49,7 +50,7 @@ def graph_events_page(request):
 def graph_people_page(request):
     context = {
         "all_sessions": Session.objects.all(),
-        "people": get_people()
+        "people_by_session": get_people_by_session()
     }
     return render(request, 'signin/graph_people.html', context)
 
@@ -92,6 +93,6 @@ class GraphEventsHandler(APIView):
 
 class GraphPeopleHandler(APIView):
     def put(self, request: Request):
-        data = json.loads(request.body)
-        people_graph = graph_people(data['people_ids'])
+        session = Session.objects.get(code=request.data["session"])
+        people_graph = graph_people(request.data['people_ids'], session)
         return JsonResponse({"people_graph": people_graph})

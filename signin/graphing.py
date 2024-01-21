@@ -24,7 +24,7 @@ def generate_graph(fig: go.Figure):
     return fig.to_html(full_html=False, config=config, include_plotlyjs='cdn', default_height=680)
 
 
-def graph_people(people_ids: list):
+def graph_people(people_ids: list[str], session: Session):
     """
     Generates a heatmap
     x = dates of events
@@ -32,7 +32,7 @@ def graph_people(people_ids: list):
     z = if they attended that date or not (1 or 0)
     """
     people = [Person.objects.get(pk=pk) for pk in people_ids]   # converts the list of ids into a list of Person objects
-    dates = Signin.objects.dates('date', 'day')
+    dates = Signin.objects.filter(session=session).dates('date', 'day')
 
     x = [date.strftime("%a %d/%m/%y") for date in dates]  # the x-axis of the heatmap corresponds to the date
     y = [person.name for person in people]          # the y-axis of the heatmap corresponds to the person
@@ -41,7 +41,7 @@ def graph_people(people_ids: list):
     for person in people:
         person_z = []
         for date in dates:
-            attended = min(person.signin_set.filter(date__date=date).count(), 1)    # 1 if attended, 0 if didn't
+            attended = min(person.signin_set.filter(date__date=date, session=session).count(), 1)    # 1 if attended, 0 if didn't
             person_z.append(attended)
         z.append(person_z)
 
