@@ -65,7 +65,7 @@
                 document.getElementById('error').hidden = true;
             }
 
-            fetch("{% url 'signin:graph_people_request' %}", {
+            fetch("{% url 'signin:api_graph_people' %}", {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
