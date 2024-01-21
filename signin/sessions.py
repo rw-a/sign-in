@@ -44,13 +44,15 @@ def get_active_sessions():
 
 def get_default_session():
     """
-    Gets an arbitrary session from the list as a default
+    Choose the most appropriate session if none is specified
     """
     active_sessions = get_active_sessions()
 
     if len(active_sessions) > 0:
+        # Choose one which is active, if possible
         session = active_sessions.earliest("sign_in_time")
     else:
+        # Otherwise, choose one arbitrarily
         session = Session.objects.all().earliest("sign_in_time")
 
     return session
