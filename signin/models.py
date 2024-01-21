@@ -19,13 +19,15 @@ class Session(models.Model):
         ])
 
     sign_in_time = models.TimeField(
-        help_text="The time when people can start signing in to this session."
+        help_text="The time when you expect people to start signing in to this session."
     )
     sign_out_time = models.TimeField(
-        help_text="The time when people can start signing out of this session."
+        help_text="The time when you expect people to be signing out of this session "
+                  "instead of signing in."
     )
     end_time = models.TimeField(
-        help_text="The time when everyone has left, and you can no longer sign in/out."
+        help_text="The time when you expect everyone to have left, and will no longer need anyone "
+                  "to sign in/out."
     )
 
     def __str__(self):
