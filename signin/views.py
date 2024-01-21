@@ -84,8 +84,9 @@ class SignInHandler(APIView):
 
 class GraphEventsHandler(APIView):
     def put(self, request: Request):
-        events_graphs = graph_events()
-        last_event = get_last_event_num()
+        session = Session.objects.get(code=request.data["session"])
+        events_graphs = graph_events(session)
+        last_event = get_last_event_num(session)
         return JsonResponse({"events_graph": events_graphs, "last_event": last_event})
 
 

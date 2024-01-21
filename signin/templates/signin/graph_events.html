@@ -10,22 +10,30 @@
     {% include "signin/navbar.html" with sessions=all_sessions %}
     <div class="container-md my-3 px-3" id="container">
         <div class="row">
-            <h2>Number of People Signed in by Event</h2>
-            <p id="last_event"></p>
+            <h2>Number of Attendees By Event</h2>
+            <div class="d-block">
+            {% for session in all_sessions %}
+                <button id="{{ session.code }}" onclick="graph(this)" type="button" class="btn btn-primary">{{ session.name }}</button>
+            {% endfor %}
+            </div>
         </div>
         <iframe width="100%" height="700px" id="events_graph"></iframe>
+        <p id="last_event"></p>
         <a href="/graph_people" class="opacity-25">Other graph</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script>
-        function graph() {
-            fetch("{% url 'signin:graph_events_request' %}", {
+        function graph(session_button) {
+            fetch("{% url 'signin:api_graph_events' %}", {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     "X-CSRFToken": '{{csrf_token}}'
-            },
+                },
                 credentials: 'same-origin',
+                body: JSON.stringify({
+                    session: session_button.id
+                })
             })
             .then((response) => response.json())
             .then((data) => {
@@ -37,8 +45,6 @@
                 console.error('Error:', error);
             });
         }
-
-        window.onload = graph;
     </script>
 </body>
 </html>

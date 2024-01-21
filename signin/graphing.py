@@ -1,5 +1,5 @@
 import plotly.graph_objects as go
-from .models import Person, Signin
+from .models import Person, Signin, Session
 
 
 def generate_graph(fig: go.Figure):
@@ -54,19 +54,26 @@ def graph_people(people_ids: list):
     return generate_graph(fig)
 
 
-def graph_events():
+def graph_events(session: Session):
     """
     Generates a line graph
     x = dates of events
     y = number of people who signed in on that day
     """
-    dates = Signin.objects.dates('date', 'day')
+    dates = Signin.objects.filter(session=session).dates('date', 'day')
 
     x = []
     y = []
     for date in dates:
         x.append(date.strftime("%a %d/%m/%y"))
-        y.append(Person.objects.filter(signin__date__date=date, signin__is_signin=True).distinct().count())
+        y.append(
+            Person.objects.filter(
+                signin__date__date=date,
+                signin__is_signin=True,
+                signin__session=session)
+            .distinct()
+            .count()
+        )
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='lines'))
@@ -75,10 +82,19 @@ def graph_events():
     return generate_graph(fig)
 
 
-def get_last_event_num() -> int:
+def get_last_event_num(session: Session) -> int:
     """
     Returns the number of people who attended the last event.
     """
-    last_event = Signin.objects.latest('date')
+    try:
+        last_event = Signin.objects.filter(session=session).latest('date')
+    except Signin.DoesNotExist:
+        return 0
+
     date = last_event.date
-    return Person.objects.filter(signin__date__date=date, signin__is_signin=True).distinct().count()
+    return Person.objects.filter(
+            signin__date__date=date,
+            signin__is_signin=True,
+            signin__session=session)\
+        .distinct()\
+        .count()
