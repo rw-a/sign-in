@@ -1,14 +1,15 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 from .models import Person, Session, Signin
 
 
 @admin.register(Session)
-class SessionAdmin(admin.ModelAdmin):
+class SessionAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'code', 'sign_in_time', 'sign_out_time', 'end_time')
 
 
 @admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'emergency_contact_name', 'emergency_contact_phone_number',
                     'media_permission', 'person_sessions', 'hidden', 'pk')
     date_hierarchy = "date_added"

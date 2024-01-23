@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from simple_history.models import HistoricalRecords
 
 
 class Session(models.Model):
@@ -29,6 +30,8 @@ class Session(models.Model):
         help_text="The time when you expect everyone to have left, and will no longer need anyone "
                   "to sign in/out."
     )
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -65,6 +68,8 @@ class Person(models.Model):
 
     objects = models.Manager()
     actives = ActivePersonManager()
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Person"

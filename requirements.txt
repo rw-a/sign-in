@@ -3,3 +3,4 @@ python-dotenv
 plotly
 kaleido
 djangorestframework
+django-simple-history
