@@ -45,8 +45,6 @@
 
         const people = {{ people | safe }};
 
-        let selectedSession = "{{ current_session.code | safe }}";
-
         for (const element of document.querySelectorAll('button[class~="session"]')) {
             element.addEventListener('click', () => {
                 selectSession(element.id);
