@@ -8,7 +8,7 @@ from rest_framework.request import Request
 from .models import Person, Session, Signin
 from .graphing import graph_people, graph_events, get_last_event_num
 from .sessions import get_default_session, get_people_signin_status, get_people_by_session, \
-    is_sign_in_time
+    is_sign_in_time, get_people_by_session_name_and_signed_in
 
 
 def index(request):
@@ -61,6 +61,16 @@ def options_page(request):
         "all_sessions": Session.objects.all(),
     }
     return render(request, 'signin/options.html', context)
+
+
+@staff_member_required
+def spinner_page(request):
+    context = {
+        "all_sessions": Session.objects.all(),
+        "current_session": get_default_session(),
+        "people": get_people_by_session_name_and_signed_in(),
+    }
+    return render(request, 'signin/spinner.html', context)
 
 
 class SignInHandler(APIView):

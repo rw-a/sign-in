@@ -13,6 +13,8 @@ urlpatterns = [
     path('graph/', views.graph_events_page, name='graph'),
     path('graph_people/', views.graph_people_page, name='graph_people'),
 
+    path('spinner/', views.spinner_page, name='spinner'),
+
     path('options/', views.options_page, name='options'),
 
     path('api/signin/', views.SignInHandler.as_view(), name='api_signin'),

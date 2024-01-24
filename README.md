@@ -11,8 +11,10 @@ A website to manage signing in/out of events.
 ## Features
 - Simple front end for users to sign in/out.
 - Store important information about each attendee (e.g. emergency contact details).
+- Supports multiple concurrent sessions.
 - Analytics to provide insight into attendance trends.
-- Works even with multiple concurrent sessions.
+- Spinner to randomly choose a person from a session.
+
 
 ## Depreciated Features
 - QR code scanner for quick sign in/out.

@@ -6,6 +6,18 @@ from django.utils import timezone
 from .models import Person, Session
 
 
+def person_is_signed_in(person: Person, session: Session):
+    person_signins = person.signin_set.filter(session=session)
+
+    if person_signins.count() == 0:
+        # if a person has no sign ins, treat them as signed out
+        return False
+    else:
+        # Gets the most recent sign in/out to check
+        last_signin = person_signins.latest("date")
+        return last_signin.is_signin
+
+
 def get_people_by_session():
     sessions: dict[str, dict[str, str]] = {}
 
@@ -14,6 +26,21 @@ def get_people_by_session():
 
         for person in session.person_set.filter(hidden=False):
             people[person.pk] = person.name
+
+        sessions[session.code] = people
+
+    return sessions
+
+
+def get_people_by_session_name_and_signed_in():
+    sessions: dict[str, dict[str, int]] = {}
+
+    for session in Session.objects.all():
+        people: dict[str, int] = {}
+
+        for person in session.person_set.filter(hidden=False):
+            # Use int instead of bool because bool cannot be converted to JavaScript
+            people[person.name] = 1 if person_is_signed_in(person, session) else 0
 
         sessions[session.code] = people
 
@@ -33,14 +60,8 @@ def get_people_signin_status(session: Session):
         if not person.media_permission:
             name += "﹒"
 
-        person_signins = person.signin_set.filter(session=session)
+        people[person.pk] = {"name": name, "signed_in": person_is_signed_in(person, session)}
 
-        if person_signins.count() == 0:
-            # if a person has no sign ins, treat them as signed out
-            people[person.pk] = {"name": name, "signed_in": False}
-        else:
-            last_signin = person_signins.latest("date")  # gets the most recent sign in/out
-            people[person.pk] = {"name": name, "signed_in": last_signin.is_signin}
     return people
 
 

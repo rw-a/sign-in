@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wheel Spinner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC">
+</head>
+<body>
+    {% include "signin/navbar.html" with sessions=all_sessions current_session="" %}
+    <div class="container-md my-3 px-3">
+        <div id="spinner_options">
+            <h4>Spinner Options</h4>
+            <div class="form-check form-switch">
+                <input type="checkbox" class="form-check-input" id="signed_in_only">
+                <label class="form-check-label">Signed In Only</label>
+            </div>
+            <div class="d-block">
+            {% for session in all_sessions %}
+                <button id="{{ session.code }}" type="button" class="btn btn-primary session">{{ session.name }}</button>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button type="button" id="spin_button" class="btn btn-success btn-lg" hidden>Spin!</button>
+        </div>
+        <div id="wheel-wrapper"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous" defer></script>
+    <script type="module">
+        import {Wheel} from 'https://cdn.jsdelivr.net/npm/spin-wheel@4.3.1/dist/spin-wheel-esm.js';
+
+        const people = {{ people | safe }};
+
+        let selectedSession = "{{ current_session.code | safe }}";
+
+        for (const element of document.querySelectorAll('button[class~="session"]')) {
+            element.addEventListener('click', () => {
+                selectSession(element.id);
+            })
+        }
+
+        function selectSession(session_code) {
+            const signedInOnly = document.getElementById("signed_in_only").checked;
+
+            const items = signedInOnly
+                ? Object.entries(people[session_code])
+                    .filter(([name, signedIn]) => signedIn)
+                    .map(([name, signedIn]) => {return {label: name}})
+                : Object.keys(people[session_code])
+                    .map((p) => {return {label: p}});
+
+            const props = {
+                items: items,
+                itemLabelFontSizeMax: 50,
+                radius: 0.84,
+                itemLabelRadius: 0.95,
+                itemLabelRadiusMax: 0.35,
+                itemLabelFont: 'Amatic SC',
+                itemLabelBaselineOffset: -0.07,
+                itemLabelRotation: 180,
+                itemLabelAlign: 'left',
+                itemLabelColors: ['#fff'],
+                itemBackgroundColors: ['#ffc93c', '#66bfbf', '#a2d5f2', '#515070', '#43658b', '#ed6663', '#d54062' ],
+                overlayImage: "{% static 'spinner_border.svg' %}",
+                image: "{% static 'spinner_center.svg' %}",
+                isInteractive: false,
+                rotation: Math.random() * 360,
+                rotationSpeedMax: 500,
+                rotationResistance: -50
+            }
+
+            const container = document.getElementById('wheel-wrapper');
+            const wheel = new Wheel(container, props);
+
+            document.getElementById('spinner_options').hidden = true;
+
+            const spinButton = document.getElementById('spin_button');
+            spinButton.hidden = false;
+            spinButton.addEventListener('click', () => {
+                wheel.spin(250 * (Math.random() + 1));
+            })
+        }
+    </script>
+</body>
+</html>
