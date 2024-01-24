@@ -63,9 +63,11 @@
                 : Object.keys(people[session_code])
                     .map((p) => {return {label: p}});
 
+            const resistance = Number(localStorage.getItem("spinnerResistance") || "100");
+
             const props = {
                 items: items,
-                itemLabelFontSizeMax: 50,
+                itemLabelFontSizeMax: 100,
                 radius: 0.84,
                 itemLabelRadius: 0.95,
                 itemLabelRadiusMax: 0.35,
@@ -79,8 +81,8 @@
                 image: "{% static 'spinner_center.svg' %}",
                 isInteractive: false,
                 rotation: Math.random() * 360,
-                rotationSpeedMax: 500,
-                rotationResistance: -50
+                rotationSpeedMax: 1000,
+                rotationResistance: -resistance
             }
 
             const container = document.getElementById('wheel-wrapper');
@@ -91,7 +93,8 @@
             const spinButton = document.getElementById('spin_button');
             spinButton.hidden = false;
             spinButton.addEventListener('click', () => {
-                wheel.spin(250 * (Math.random() + 1));
+                const spinSpeed = Number(localStorage.getItem("spinnerSpeed") || "500");
+                wheel.spin(spinSpeed * (Math.random() + 1));
             })
         }
     </script>

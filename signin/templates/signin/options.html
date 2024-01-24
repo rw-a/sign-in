@@ -18,19 +18,41 @@
             <p class="fst-italic mb-2">Default: 16</p>
             <br>
         </div>
+        <div>
+            <h4 class="mb-0">Spinner</h4>
+
+            <label for="spinnerSpeed">Spinner Speed:</label>
+            <input id="spinnerSpeed" type="number" min="100" max="500">
+            <p class="fst-italic mb-2">Default: 500</p>
+
+            <label for="spinnerResistance">Spinner Resistance:</label>
+            <input id="spinnerResistance" type="number" min="0" max="500">
+            <p class="fst-italic mb-2">Default: 100</p>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script>
         const storage = window.localStorage;
 
-        const fontSizeInputs = ["fontSize"];     // IDs for input elements of type number
+        const fontSizeInputs = ["fontSize"];
         initialiseNumberInputs(fontSizeInputs, 16);
 
+        const spinnerSpeedInputs = ["spinnerSpeed"];
+        initialiseNumberInputs(spinnerSpeedInputs, 500);
+
+        const spinnerResistanceInputs = ["spinnerResistance"];
+        initialiseNumberInputs(spinnerResistanceInputs, 100);
+
+        /**
+         * Automatically generates default values and event handlers for number inputs
+         * @param {string[]} numberInputs The id of the number input elements whose values/event handlers will be initialised.
+         * @param {number} defaultValue The default values for all the elements in numberInputs
+         */
         function initialiseNumberInputs(numberInputs, defaultValue) {
-            // automatically generates default values and event handlers for number inputs
             for (const numberInputID of numberInputs) {
                 const numberInputElement = document.getElementById(numberInputID);
                 let numberInputValue = storage.getItem(numberInputID);
+
                 numberInputElement.value = (numberInputValue) ? numberInputValue : defaultValue;  // sets default to 16
                 numberInputElement.addEventListener('change', (event) => {
                     numberInputValue = event.target.value;
