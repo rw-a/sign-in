@@ -19,7 +19,7 @@
     {% endif %}
 </style>
 <body>
-    {% include "signin/navbar.html" with sessions=all_sessions current_session=current_session %}
+    {% include "signin/navbar.html" %}
     <div class="container-md my-3 px-3">
         <h1>{{ current_session.name }}</h1>
         <p id="peopleCount" class="text-secondary"></p>

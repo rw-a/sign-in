@@ -5,7 +5,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                {% for session in sessions %}
+                {% for session in all_sessions %}
                 <a href="/signin/{{ session.code }}" class="nav-item nav-link {% if session.name == current_session.name %}active{% endif %}">{{ session.name }}</a>
                 {% endfor %}
             </div>
