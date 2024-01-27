@@ -14,7 +14,7 @@ class PersonAdmin(SimpleHistoryAdmin):
                     'media_permission', 'person_sessions', 'hidden', 'pk')
     date_hierarchy = "date_added"
     actions = ('allow_media_permission', 'disallow_media_permission', 'hide', 'unhide')
-    list_filter = ("hidden", "media_permission")
+    list_filter = ("hidden", "media_permission", "sessions")
 
     @admin.display
     def person_sessions(self, obj: Person):
