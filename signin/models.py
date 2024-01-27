@@ -1,6 +1,6 @@
 from django.db import models
-from django.db.models.functions import Upper
-from django.db.models import Index
+from django.db.models.functions import Upper, Concat
+from django.db.models import Index, UniqueConstraint
 from django.contrib import admin
 from django.utils import timezone
 from django.core.validators import RegexValidator
@@ -78,7 +78,14 @@ class Person(models.Model):
         # sort by last name, then first name, ignoring all case
         ordering = [Upper('last_name'), Upper('first_name')]
 
-        unique_together = [('first_name', 'last_name')]
+        constraints = [
+            UniqueConstraint(
+                Concat(Upper("last_name"), Upper("first_name")),
+                name="person_name",
+                violation_error_message="Person with this name already exists."
+            )
+        ]
+
         indexes = [
             Index(Upper('last_name'), name='idx_person_last_name')
         ]
