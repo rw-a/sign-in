@@ -1,8 +1,8 @@
 from django.db import models
 from django.db.models.functions import Upper
+from django.db.models import Index
 from django.contrib import admin
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from simple_history.models import HistoricalRecords
 
@@ -11,7 +11,7 @@ class Session(models.Model):
     name = models.CharField(max_length=100)
     code = models.CharField(
         max_length=100,
-        primary_key=True,
+        unique=True,
         validators=[
             RegexValidator(
                 '[a-z0-9_]',
@@ -74,8 +74,14 @@ class Person(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "People"
+
         # sort by last name, then first name, ignoring all case
         ordering = [Upper('last_name'), Upper('first_name')]
+
+        unique_together = [('first_name', 'last_name')]
+        indexes = [
+            Index(Upper('last_name'), name='idx_person_last_name')
+        ]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -98,12 +104,6 @@ class Person(models.Model):
         self.first_name = self.first_name.title()
         self.last_name = self.last_name.title()
         super().save(*args, **kwargs)
-
-    def clean(self):
-        super().clean()
-        if Person.objects.filter(first_name__iexact=self.first_name,
-                                 last_name__iexact=self.last_name).exclude(pk=self.pk).exists():
-            raise ValidationError(f"{self.first_name} {self.last_name} already exists.")
 
 
 class Signin(models.Model):
