@@ -82,7 +82,7 @@ class Person(models.Model):
             UniqueConstraint(
                 Concat(Upper("last_name"), Upper("first_name")),
                 name="person_name",
-                # violation_error_message="Person with this name already exists."
+                violation_error_message="Person with this name already exists."
             )
         ]
 
