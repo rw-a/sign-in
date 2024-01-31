@@ -11,8 +11,13 @@ input[type="checkbox"] {
     width: var(--label-font-size, 1rem);
 }
 
+.person-card:has(+ input[type="checkbox"]:checked) {
+    background-color: rgba(3, 158, 252, 0.3);
+    border: var(--bs-border-width) solid rgba(0, 0, 0, 0) !important;
+}
+
 @media (min-width: 992px) {
-    ul {
+    .columns {
         -webkit-column-count: 4;
         -moz-column-count: 4;
         column-count: 4;
@@ -20,7 +25,7 @@ input[type="checkbox"] {
 }
 
 @media (min-width: 576px) and (max-width: 992px) {
-     ul {
+     .columns {
       -webkit-column-count: 3;
       -moz-column-count: 3;
       column-count: 3;
@@ -28,7 +33,7 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 576px) {
-    ul {
+    .columns {
         -webkit-column-count: 2;
         -moz-column-count: 2;
         column-count: 2;
