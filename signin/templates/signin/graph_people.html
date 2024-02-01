@@ -38,7 +38,7 @@
                 {% for pk, name in people.items %}
                 <li>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="{{ pk }}" title="{{ name }}">
+                        <input class="form-check-input" type="checkbox" id="{{ pk }}" value="{{ pk }}" title="{{ name }}">
                         <label class="form-check-label" for="{{ pk }}">{{ name }}</label>
                     </div>
                 </li>
