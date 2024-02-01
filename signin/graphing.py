@@ -48,8 +48,10 @@ def graph_people(people_ids: list[str], session: Session):
     fig = go.Figure(data=go.Heatmap(
         z=z, y=y, x=x,
         colorscale='RdYlGn',
-        xgap=1, ygap=1
+        xgap=1, ygap=1,
     ))
+
+    fig.update_traces(showscale=False)
 
     return generate_graph(fig)
 
