@@ -1,21 +1,23 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from typing import TypedDict
+from typing import TypedDict, Literal
 from django.conf import settings
 from django.utils import timezone
 from .models import Person, Session
 
 
-def person_is_signed_in(person: Person, session: Session):
+def person_is_signed_in(person: Person, session: Session) -> Literal[0, 1]:
     person_signins = person.signin_set.filter(session=session)
 
     if person_signins.count() == 0:
-        # if a person has no sign ins, treat them as signed out
-        return False
+        # If a person has no sign ins, treat them as signed out
+        return 0
     else:
         # Gets the most recent sign in/out to check
         last_signin = person_signins.latest("date")
-        return last_signin.is_signin
+
+        # Use int instead of bool because bool cannot be converted to JavaScript
+        return 1 if last_signin.is_signin else 0
 
 
 def get_people_by_session():
@@ -39,8 +41,7 @@ def get_people_by_session_name_and_signed_in():
         people: dict[str, int] = {}
 
         for person in session.person_set.filter(hidden=False):
-            # Use int instead of bool because bool cannot be converted to JavaScript
-            people[person.name] = 1 if person_is_signed_in(person, session) else 0
+            people[person.name] = person_is_signed_in(person, session)
 
         sessions[session.code] = people
 
