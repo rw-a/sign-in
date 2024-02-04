@@ -37,8 +37,3 @@ updatePeopleCount();
 // Load font size from options
 const fontSize = window.localStorage.getItem("fontSize") || "16";
 document.querySelector('html').style.fontSize = `${fontSize}px`;
-
-// Auto-refresh the page every 5 seconds
-setTimeout(() => {
-    location.reload();
-}, 5000);
