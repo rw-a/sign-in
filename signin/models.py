@@ -130,6 +130,9 @@ class Signin(models.Model):
     class Meta:
         verbose_name = "Sign In/Out"
         ordering = ('-date',)
+        indexes = [
+            Index(fields=['-date'])
+        ]
 
     def __str__(self):
         return f"{self.person} - {'Sign In' if self.is_signin else 'Sign Out'}"
