@@ -1,5 +1,4 @@
-function signIn(event) {
-    const element = event.target;
+function signIn(element) {
     const is_signin = element.checked;
     const pk = element.value;
 
@@ -28,33 +27,16 @@ function signIn(event) {
     });
 }
 
-function renderPeople() {
-    const peopleList = document.getElementById("peopleList");
-
+function updatePeople() {
     for ([pk, person] of Object.entries(people)) {
-        const container = document.createElement("div");
-        container.className = "form-check ps-0";
+        const personCheckbox = document.getElementById(pk);
 
-        const label= document.createElement("label");
-        label.className = "person-card form-check-label w-100 py-1 ps-2 mb-2 border border-1 rounded";
-        label.htmlFor = pk;
-        label.innerText = person.name;
-
-        const input = document.createElement("input");
-        input.className = "form-check-input d-none";
-        input.type = "checkbox";
-        input.id = pk;
-        input.value = pk;
-        input.title = person.name;
-        input.onclick = signIn;
-        if (person.signed_in) {
-            input.checked = true;
+        if (Boolean(person.signed_in) !== Boolean(personCheckbox.checked)) {
+            personCheckbox.checked = person.signed_in;
         }
-
-        container.appendChild(label);
-        container.appendChild(input);
-        peopleList.appendChild(container);
     }
+
+    updatePeopleCount()
 }
 
 function updatePeopleCount() {
@@ -70,5 +52,5 @@ function updatePeopleCount() {
 const fontSize = window.localStorage.getItem("fontSize") || "16";
 document.querySelector('html').style.fontSize = `${fontSize}px`;
 
-updatePeopleCount();
-renderPeople();
+updatePeople();
+setInterval(updatePeople, 3000);
