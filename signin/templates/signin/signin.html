@@ -34,50 +34,10 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script>
-        function signIn(element) {
-            const is_signin = element.checked;
-
-            fetch("{% url 'signin:api_signin' %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "X-CSRFToken": '{{csrf_token}}'
-            },
-                credentials: 'same-origin',
-                body: JSON.stringify({
-                    pk: element.value,
-                    is_signin: is_signin,
-                    session: "{{ current_session.code }}"
-                }),
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-                updatePeopleCount();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
-
-        function updatePeopleCount() {
-            const numPeople = document.querySelectorAll('input[type="checkbox"]:checked').length;
-            if (numPeople > 0) {
-                document.getElementById('peopleCount').innerText = `Signed In: ${numPeople}`;
-            } else {
-                document.getElementById('peopleCount').innerText = "Nobody is signed in right now";
-            }
-        }
-        updatePeopleCount();
-
-        // Load font size from options
-        const fontSize = window.localStorage.getItem("fontSize") || "16";
-        document.querySelector('html').style.fontSize = `${fontSize}px`;
-
-        // Auto-refresh the page every 5 seconds
-        setTimeout(() => {
-            location.reload();
-        }, 5000);
+        const api_signin_path = "{% url 'signin:api_signin' %}";
+        const csrf_token = "{{csrf_token}}";
+        const current_session_code = "{{ current_session.code }}";
     </script>
+    <script src="{% static 'signin.js' %}"></script>
 </body>
 </html>
