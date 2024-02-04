@@ -1,4 +1,3 @@
-import json
 from django.urls import reverse
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -76,7 +75,8 @@ class SignInHandler(APIView):
     """
     Handles Sign In/Out requests.
     """
-    def post(self, request: Request):
+    @staticmethod
+    def post(request: Request):
         try:
             person = Person.objects.get(pk=request.data['pk'])
             session = Session.objects.get(code=request.data['session'])
@@ -93,7 +93,8 @@ class SignInHandler(APIView):
 
 
 class GraphEventsHandler(APIView):
-    def put(self, request: Request):
+    @staticmethod
+    def put(request: Request):
         session = Session.objects.get(code=request.data["session"])
         events_graphs = graph_events(session)
         last_event = get_last_event_num(session)
@@ -101,7 +102,8 @@ class GraphEventsHandler(APIView):
 
 
 class GraphPeopleHandler(APIView):
-    def put(self, request: Request):
+    @staticmethod
+    def put(request: Request):
         session = Session.objects.get(code=request.data["session"])
         people_graph = graph_people(request.data['people_ids'], session)
         return JsonResponse({"people_graph": people_graph})
