@@ -37,7 +37,10 @@ class Session(models.Model):
         return self.name
 
     class Meta:
-        ordering = ("name",)
+        ordering = ("sign_in_time",)
+        indexes = [
+            Index(fields=["sign_in_time"])
+        ]
 
 
 class ActivePersonManager(models.Manager):
