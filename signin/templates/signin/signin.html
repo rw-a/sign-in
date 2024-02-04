@@ -22,7 +22,7 @@
     {% include "signin/navbar.html" %}
     <div class="container-md my-3 px-3">
         <h1>{{ current_session.name }}</h1>
-        <p id="peopleCount" class="text-secondary"></p>
+        <p id="peopleCount" class="text-secondary">Signed In: ?</p>
         <div class="columns" id="peopleList">
             {% for pk, person in people.items %}
                 <div class="form-check ps-0">
