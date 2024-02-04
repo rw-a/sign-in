@@ -76,7 +76,19 @@ class SignInHandler(APIView):
     Handles Sign In/Out requests.
     """
     @staticmethod
+    def get(request: Request):
+        """
+        Handles requests to get the list of people and their signin status.
+        """
+        session = Session.objects.get(code=request.query_params["session"].lower())
+
+        return JsonResponse(get_people_signin_status(session))
+
+    @staticmethod
     def post(request: Request):
+        """
+        Handles requests to sign somebody in/out.
+        """
         try:
             person = Person.objects.get(pk=request.data['pk'])
             session = Session.objects.get(code=request.data['session'])

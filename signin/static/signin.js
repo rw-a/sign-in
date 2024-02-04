@@ -28,15 +28,21 @@ function signIn(element) {
 }
 
 function updatePeople() {
-    for ([pk, person] of Object.entries(people)) {
-        const personCheckbox = document.getElementById(pk);
+    fetch(`${api_signin_path}?session=${current_session_code}`)
+    .then((response) => response.json())
+    .then((data) => {
+        people = data;
 
-        if (Boolean(person.signed_in) !== Boolean(personCheckbox.checked)) {
-            personCheckbox.checked = person.signed_in;
+        for ([pk, person] of Object.entries(people)) {
+            const personCheckbox = document.getElementById(pk);
+
+            if (Boolean(person.signed_in) !== Boolean(personCheckbox.checked)) {
+                personCheckbox.checked = person.signed_in;
+            }
         }
-    }
 
-    updatePeopleCount()
+        updatePeopleCount();
+    });
 }
 
 function updatePeopleCount() {
@@ -53,4 +59,4 @@ const fontSize = window.localStorage.getItem("fontSize") || "16";
 document.querySelector('html').style.fontSize = `${fontSize}px`;
 
 updatePeople();
-setInterval(updatePeople, 3000);
+setInterval(updatePeople, 5000);
