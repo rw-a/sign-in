@@ -43,7 +43,8 @@ function selectSession(session_code) {
         isInteractive: false,
         rotation: Math.random() * 360,
         rotationSpeedMax: 1000,
-        rotationResistance: -resistance
+        rotationResistance: -resistance,
+        onRest: (event) => onPersonSelect(event, items)
     }
 
     // Initialise spinner
@@ -60,4 +61,23 @@ function selectSession(session_code) {
         const spinSpeed = Number(localStorage.getItem("spinnerSpeed") || "500");
         wheel.spin(spinSpeed * (Math.random() + 1));
     })
+
+    function onPersonSelect(event, items) {
+        const selectedPerson = items[event.currentIndex].label
+
+        // Add person to list of selected people
+        const text = document.createTextNode(selectedPerson)
+
+        const textEl = document.createElement("p")
+        textEl.classList.add("chosen-person")
+        textEl.appendChild(text)
+
+        const chosenPeopleContainer = document.getElementById("chosen_people")
+        chosenPeopleContainer.appendChild(textEl)
+
+        textEl.addEventListener("click", (event) => {
+            const el = event.currentTarget
+            el.remove()
+        })
+    }
 }
