@@ -34,14 +34,24 @@ def get_people_by_session():
     return sessions
 
 
-def get_people_by_session_name_and_signed_in():
-    sessions: dict[str, dict[str, int]] = {}
+def get_people_for_spinner():
+    class PersonDetails(TypedDict):
+        is_signed_in: Literal[0, 1]     # Instead of bool
+        days_added_ago: int             # How many days ago the person was added
+
+    # Maps a session cde to a list of people
+    sessions: dict[str, dict[str, PersonDetails]] = {}
 
     for session in Session.objects.all():
-        people: dict[str, int] = {}
+        # Maps a person's name to their details
+        people: dict[str, PersonDetails] = {}
 
         for person in session.person_set.filter(hidden=False):
-            people[person.name] = person_is_signed_in(person, session)
+            person_details: PersonDetails = {
+                "is_signed_in": person_is_signed_in(person, session),
+                "days_added_ago": (timezone.now() - person.date_added).days
+            }
+            people[person.name] = person_details
 
         sessions[session.code] = people
 

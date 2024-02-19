@@ -9,14 +9,20 @@ for (const element of document.querySelectorAll('button[class~="session"]')) {
 
 // Initialise spinner using selected session
 function selectSession(session_code) {
+    // Get option values
     const signedInOnly = document.getElementById("signed_in_only").checked;
+    const filterNew = document.getElementById("filter_new").checked;
 
-    const items = signedInOnly
-        ? Object.entries(people[session_code])
-            .filter(([name, signedIn]) => signedIn)
-            .map(([name, signedIn]) => {return {label: name}})
-        : Object.keys(people[session_code])
-            .map((p) => {return {label: p}});
+    // Get the people (filtered based on options selected)
+    let peopleInSession = Object.entries(people[session_code])
+    if (signedInOnly) {
+        peopleInSession = peopleInSession.filter(([_, personDetails]) => personDetails["is_signed_in"])
+    }
+    if (filterNew) {
+        const minDaysRequired = Number(localStorage.getItem("spinnerMinDays") || "20")
+        peopleInSession = peopleInSession.filter(([_, personDetails]) => personDetails["days_added_ago"] >= minDaysRequired)
+    }
+    const items = peopleInSession.map(([name, _]) => {return {label: name}})
 
     const resistance = Number(localStorage.getItem("spinnerResistance") || "100");
 
