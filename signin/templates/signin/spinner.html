@@ -16,7 +16,11 @@
         src:
             local("Amatic SC"),
             url("{% static 'spinner_font.woff2' %}") format("woff2");
-        }
+    }
+
+    .use-font {
+        font-family: "Amatic SC", system-ui;
+    }
 </style>
 </head>
 <body>
@@ -38,63 +42,14 @@
             <button type="button" id="spin_button" class="btn btn-success btn-lg" hidden>Spin!</button>
         </div>
         <div id="wheel-wrapper" class="vh-100"></div>
+        <p class="use-font">.</p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous" defer></script>
-    <script type="module">
-        import {Wheel} from 'https://cdn.jsdelivr.net/npm/spin-wheel@4.3.1/dist/spin-wheel-esm.js';
-
+    <script>
         const people = {{ people | safe }};
-
-        for (const element of document.querySelectorAll('button[class~="session"]')) {
-            element.addEventListener('click', () => {
-                selectSession(element.id);
-            })
-        }
-
-        function selectSession(session_code) {
-            const signedInOnly = document.getElementById("signed_in_only").checked;
-
-            const items = signedInOnly
-                ? Object.entries(people[session_code])
-                    .filter(([name, signedIn]) => signedIn)
-                    .map(([name, signedIn]) => {return {label: name}})
-                : Object.keys(people[session_code])
-                    .map((p) => {return {label: p}});
-
-            const resistance = Number(localStorage.getItem("spinnerResistance") || "100");
-
-            const props = {
-                items: items,
-                itemLabelFontSizeMax: 100,
-                radius: 0.84,
-                itemLabelRadius: 0.95,
-                itemLabelRadiusMax: 0.35,
-                itemLabelFont: 'Amatic SC',
-                itemLabelBaselineOffset: -0.07,
-                itemLabelRotation: 180,
-                itemLabelAlign: 'left',
-                itemLabelColors: ['#fff'],
-                itemBackgroundColors: ['#ffc93c', '#66bfbf', '#a2d5f2', '#515070', '#43658b', '#ed6663', '#d54062' ],
-                overlayImage: "{% static 'spinner_border.svg' %}",
-                image: "{% static 'spinner_center.svg' %}",
-                isInteractive: false,
-                rotation: Math.random() * 360,
-                rotationSpeedMax: 1000,
-                rotationResistance: -resistance
-            }
-
-            const container = document.getElementById('wheel-wrapper');
-            const wheel = new Wheel(container, props);
-
-            document.getElementById('spinner_options').hidden = true;
-
-            const spinButton = document.getElementById('spin_button');
-            spinButton.hidden = false;
-            spinButton.addEventListener('click', () => {
-                const spinSpeed = Number(localStorage.getItem("spinnerSpeed") || "500");
-                wheel.spin(spinSpeed * (Math.random() + 1));
-            })
-        }
+        const spinnerImage = "{% static 'spinner_center.svg' %}";
+        const spinnerOverlayImage = "{% static 'spinner_border.svg' %}";
     </script>
+    <script type="module" src="{% static 'spinner.js' %}"></script>
 </body>
 </html>
