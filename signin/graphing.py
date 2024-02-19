@@ -32,7 +32,7 @@ def graph_people(people_ids: list[str], session: Session):
     z = if they attended that date or not (1 or 0)
     """
     people = [Person.objects.get(pk=pk) for pk in people_ids]   # converts the list of ids into a list of Person objects
-    dates = Signin.objects.filter(session=session).dates('date', 'day')
+    dates = Signin.objects.filter(session=session, is_signin=True).dates('date', 'day')
 
     x = [date.strftime("%a %d/%m/%y") for date in dates]  # the x-axis of the heatmap corresponds to the date
     y = [person.name for person in people]          # the y-axis of the heatmap corresponds to the person
@@ -62,7 +62,7 @@ def graph_events(session: Session):
     x = dates of events
     y = number of people who signed in on that day
     """
-    dates = Signin.objects.filter(session=session).dates('date', 'day')
+    dates = Signin.objects.filter(session=session, is_signin=True).dates('date', 'day')
 
     x = []
     y = []
@@ -89,7 +89,7 @@ def get_last_event_num(session: Session) -> int:
     Returns the number of people who attended the last event.
     """
     try:
-        last_event = Signin.objects.filter(session=session).latest('date')
+        last_event = Signin.objects.filter(session=session, is_signin=True).latest('date')
     except Signin.DoesNotExist:
         return 0
 
