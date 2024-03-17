@@ -1,6 +1,11 @@
+// List of PKs of people that have been recently signed in/out by this client
+const recentlySignedInPeople = [];
+
 function signIn(element) {
     const is_signin = element.checked;
     const pk = element.value;
+
+    recentlySignedInPeople.push(pk);
 
     fetch(api_signin_path, {
         method: 'POST',
@@ -17,7 +22,7 @@ function signIn(element) {
     })
     .then((response) => response.json())
     .then((data) => {
-        console.log('Success:', data);
+        // console.log('Success:', data);
         updatePeopleCount();
     })
     .catch((error) => {
@@ -30,6 +35,11 @@ function updatePeople() {
     .then((response) => response.json())
     .then((data) => {
         for ([pk, person] of Object.entries(data)) {
+            // Don't override recent changes made by this client
+            if (recentlySignedInPeople.includes(pk)) {
+                continue;
+            }
+
             const personCheckbox = document.getElementById(pk);
 
             if (Boolean(person.signed_in) !== Boolean(personCheckbox.checked)) {
@@ -38,6 +48,8 @@ function updatePeople() {
         }
 
         updatePeopleCount();
+
+        recentlySignedInPeople.length = 0;  // Clear array
     });
 }
 
