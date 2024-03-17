@@ -2,8 +2,6 @@ function signIn(element) {
     const is_signin = element.checked;
     const pk = element.value;
 
-    people[pk]["signed_in"] = is_signin;
-
     fetch(api_signin_path, {
         method: 'POST',
         headers: {
@@ -31,9 +29,7 @@ function updatePeople() {
     fetch(`${api_signin_path}?session=${current_session_code}`)
     .then((response) => response.json())
     .then((data) => {
-        people = data;
-
-        for ([pk, person] of Object.entries(people)) {
+        for ([pk, person] of Object.entries(data)) {
             const personCheckbox = document.getElementById(pk);
 
             if (Boolean(person.signed_in) !== Boolean(personCheckbox.checked)) {

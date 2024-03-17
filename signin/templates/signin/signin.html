@@ -37,7 +37,6 @@
         const api_signin_path = "{% url 'signin:api_signin' %}";
         const csrf_token = "{{csrf_token}}";
         const current_session_code = "{{ current_session.code }}";
-        let people = {{ people | safe }};
     </script>
     <script src="{% static 'signin.js' %}"></script>
 </body>
