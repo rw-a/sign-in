@@ -1,0 +1,25 @@
+{
+  "name": "Sign In",
+  "short_name": "Signin",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "background_color": "#fff",
+  "description": "A web app to manage signing in/out.",
+  "icons": [
+    {
+      "src": "/static/icon48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
